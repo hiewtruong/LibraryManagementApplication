@@ -5,7 +5,7 @@ import com.uit.librarymanagementapplication.domain.model.Message;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.service.UserService;
 import com.uit.librarymanagementapplication.view.admin.AdminDashboardFrame;
-import com.uit.librarymanagementapplication.view.admin.lib.ComonUI;
+import com.uit.librarymanagementapplication.view.admin.lib.CommonUI;
 import javax.swing.JFrame;
 
 public class UserController {
@@ -26,7 +26,7 @@ public class UserController {
                 new AdminDashboardFrame();
             }
         } catch (ApiException e) {
-            ComonUI.showError(currentFrame, e);
+            CommonUI.showError(currentFrame, e);
         }
     }
 }

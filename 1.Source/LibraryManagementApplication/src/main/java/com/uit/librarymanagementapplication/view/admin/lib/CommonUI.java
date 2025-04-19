@@ -5,7 +5,7 @@ import com.uit.librarymanagementapplication.lib.ApiException;
 import javax.swing.*;
 import java.awt.*;
 
-public class ComonUI {
+public class CommonUI {
 
     public static void showError(Component parent, ApiException exception) {
         Message error = exception.getError();
