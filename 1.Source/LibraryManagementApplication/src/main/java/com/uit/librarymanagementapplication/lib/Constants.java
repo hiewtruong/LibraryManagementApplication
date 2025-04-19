@@ -10,16 +10,30 @@ package com.uit.librarymanagementapplication.lib;
  */
 public class Constants {
 
+    public static final String ALGORITHM = "AES";
+
     public class ErrorCode {
-        public static final String USER_NOT_FOUND = "USR_404";
-        public static final String USER_ALREADY_EXISTS = "USR_409";
 
-        public static final String BOOK_NOT_FOUND = "BOOK_404";
-        public static final String BOOK_ALREADY_EXISTS = "BOOK_409";
-
-        public static final String INTERNAL_ERROR = "SYS_500";
-        public static final String BAD_REQUEST = "REQ_400";
-        public static final String UNAUTHORIZED = "AUTH_401";
-        public static final String FORBIDDEN = "AUTH_403";
+        public static final String USER_NOT_FOUND = "USR_01";
+        public static final String PASSWORD_NOT_CORRECT = "USR_02";
+        public static final String USER_HAS_BEEN_LOCKED = "USR_03";
     }
+
+    public class ErrorMessage {
+        public static final String USER_NOT_FOUND = "No matching user account found in the system.";
+        public static final String PASSWORD_NOT_CORRECT = "Invalid username or password.";
+        public static final String USER_HAS_BEEN_LOCKED = "Your account has been locked. Please contact the administrator.";
+    }
+    
+     public class ErrorTitle {
+         
+        public static final String LOGIN = "LOGIN";
+    }
+
+    public class GeneralStatus {
+
+        public static final int OPEN = 0;
+        public static final int DELETE = 1;
+    }
+    
 }

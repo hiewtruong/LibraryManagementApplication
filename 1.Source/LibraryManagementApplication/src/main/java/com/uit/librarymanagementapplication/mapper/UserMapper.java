@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uit.librarymanagementapplication.mapper;
 
-/**
- *
- * @author hieutruong
- */
-public class UserMapper {
-    
+import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
+import com.uit.librarymanagementapplication.domain.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public interface UserMapper {
+
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
+    UserDTO toDTO(User user);
+
+    User toEntity(UserDTO userDTO);
 }

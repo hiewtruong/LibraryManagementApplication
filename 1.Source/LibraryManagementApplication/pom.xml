@@ -19,12 +19,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.15.3</version> <!-- Hoặc mới hơn -->
+            <version>2.15.3</version> 
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version> <!-- Bạn có thể dùng bản mới hơn -->
+            <version>1.5.5.Final</version> 
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -37,7 +42,7 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Annotation Processor for MapStruct -->
+       
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

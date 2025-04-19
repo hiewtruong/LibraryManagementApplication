@@ -1,6 +1,6 @@
 {
-    "url": "jdbc:sqlserver://172.16.1.240;databaseName=ATM;;encrypt=false;trustServerCertificate=true",
+    "url": "jdbc:sqlserver://172.16.1.240;databaseName=LibraryManagement;;encrypt=false;trustServerCertificate=true",
     "user": "sa",
     "password": "12345678aA@",
-    "hashKey":"123456789"
+    "hashKey":"uitlib@2025rocks"
 }

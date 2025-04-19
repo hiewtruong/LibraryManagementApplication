@@ -1,36 +1,24 @@
 package com.uit.librarymanagementapplication.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uit.librarymanagementapplication.domain.model.DbConfiguration;
+import com.uit.librarymanagementapplication.AppConfig;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 public class DbUtils {
 
-    private static DbConfiguration dbConfig;
-    private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
+    private static final String URL = AppConfig.getInstance().url;
+    private static final String USER = AppConfig.getInstance().user;
+    private static final String PASSWORD = AppConfig.getInstance().password;
 
- 
-    static {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            InputStream is = DbUtils.class.getClassLoader().getResourceAsStream("applicationSetting.json");
-            if (is == null) {
-                System.out.println("⚠️ applicationSetting.json not found");
-            }
-            dbConfig = mapper.readValue(is, DbConfiguration.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
 
     public static Connection getConnection() throws SQLException {
         Connection conn = connectionHolder.get();
         if (conn == null || conn.isClosed()) {
-            conn = DriverManager.getConnection(dbConfig.url, dbConfig.user, dbConfig.password);
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
             connectionHolder.set(conn);
         }
         return conn;

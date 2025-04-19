@@ -1,13 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uit.librarymanagementapplication.controller;
 
-/**
- *
- * @author hieutruong
- */
+import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
+import com.uit.librarymanagementapplication.domain.model.Message;
+import com.uit.librarymanagementapplication.lib.ApiException;
+import com.uit.librarymanagementapplication.service.UserService;
+import com.uit.librarymanagementapplication.view.admin.AdminDashboardFrame;
+import com.uit.librarymanagementapplication.view.admin.lib.ComonUI;
+import javax.swing.JFrame;
+
 public class UserController {
-    
+
+    private final UserService userService = new UserService();
+
+    public UserController() {
+
+    }
+
+    public void Login(JFrame currentFrame, String userName, String password, boolean isAdmin) {
+        try {
+            UserDTO user = userService.login(userName, password, isAdmin);
+            currentFrame.dispose();
+            if (isAdmin) {
+                new AdminDashboardFrame();
+            } else {
+                new AdminDashboardFrame();
+            }
+        } catch (ApiException e) {
+            ComonUI.showError(currentFrame, e);
+        }
+    }
 }
