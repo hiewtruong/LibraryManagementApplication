@@ -17,7 +17,7 @@ import java.sql.Statement;
  *
  * @author hieutruong
  */
-public class UserRepository {
+public class UserRepository implements IUserRepository {
 
     private static UserRepository instance;
 
@@ -32,6 +32,7 @@ public class UserRepository {
         return instance;
     }
 
+    @Override
     public User findByUsername(String username) {
         User user = null;
         try {

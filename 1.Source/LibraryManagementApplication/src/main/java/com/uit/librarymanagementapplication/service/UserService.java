@@ -3,22 +3,31 @@ package com.uit.librarymanagementapplication.service;
 import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
 import com.uit.librarymanagementapplication.domain.UtilService;
 import com.uit.librarymanagementapplication.domain.model.User;
+import com.uit.librarymanagementapplication.domain.repository.IUserRepository;
 import com.uit.librarymanagementapplication.domain.repository.UserRepository;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants.*;
 import com.uit.librarymanagementapplication.lib.Constants.GeneralStatus;
 import com.uit.librarymanagementapplication.mapper.UserMapper;
 
-public class UserService {
+public class UserService implements IUserService  {
 
-    private final UserRepository userRepository = new UserRepository();
+    private final IUserRepository userRepository;
 
     private static UserService instance;
 
     public UserService() {
-        
+        this.userRepository = UserRepository.getInstance(); // sử dụng interface thay vì new trực tiếp
     }
 
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
+
+    @Override
     public UserDTO login(String username, String password, boolean isAdmin) {
         UserDTO userDTO = null;
         User user = userRepository.findByUsername(username);
