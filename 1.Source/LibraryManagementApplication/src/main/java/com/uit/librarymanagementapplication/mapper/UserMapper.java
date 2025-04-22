@@ -1,6 +1,7 @@
 package com.uit.librarymanagementapplication.mapper;
 
 import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
+import com.uit.librarymanagementapplication.domain.DTO.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -13,4 +14,6 @@ public interface UserMapper {
     UserDTO toDTO(User user);
 
     User toEntity(UserDTO userDTO);
+    
+    UserDTO toDTO(UserRoleDTO user);
 }

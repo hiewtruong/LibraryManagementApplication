@@ -1,6 +1,7 @@
 package com.uit.librarymanagementapplication.service;
 
 import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
+import com.uit.librarymanagementapplication.domain.DTO.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.UtilService;
 import com.uit.librarymanagementapplication.domain.model.User;
 import com.uit.librarymanagementapplication.domain.repository.IUserRepository;
@@ -30,11 +31,16 @@ public class UserService implements IUserService  {
     @Override
     public UserDTO login(String username, String password, boolean isAdmin) {
         UserDTO userDTO = null;
-        User user = userRepository.findByUsername(username);
+        UserRoleDTO user = userRepository.findByUsername(username);
+     
         if (user == null) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
         }
         userDTO = UserMapper.INSTANCE.toDTO(user);
+           System.out.println("user"+userDTO.getIsAdmin());
+        if (isAdmin && userDTO.getIsAdmin() == 0) {
+            throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_IS_NOT_ADMIN, ErrorMessage.USER_IS_NOT_ADMIN);
+        }
         var isValid = ComparePassword(password, userDTO.getPassword());
         if (!isValid) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.PASSWORD_NOT_CORRECT, ErrorMessage.PASSWORD_NOT_CORRECT);

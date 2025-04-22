@@ -4,6 +4,7 @@
  */
 package com.uit.librarymanagementapplication.domain.repository;
 
+import com.uit.librarymanagementapplication.domain.DTO.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.model.User;
 
 /**
@@ -11,5 +12,5 @@ import com.uit.librarymanagementapplication.domain.model.User;
  * @author hieutruong
  */
 public interface IUserRepository {
-    User findByUsername(String username);
+    UserRoleDTO findByUsername(String username);
 }

@@ -13,7 +13,7 @@ public class User {
     private String email;
     private String phone;
     private String address;
-    private int userRoleID;
+    private int userRoleID_FK;
     private int isDelete;
     private Date createdDt;
     private String createdBy;
@@ -30,7 +30,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.userRoleID = userRoleID;
+        this.userRoleID_FK = userRoleID;
         this.isDelete = isDelete;
         this.createdDt = createdDt;
         this.createdBy = createdBy;
@@ -97,11 +97,11 @@ public class User {
     }
 
     public int getUserRoleID() {
-        return userRoleID;
+        return userRoleID_FK;
     }
 
     public void setUserRoleID(int userRoleID) {
-        this.userRoleID = userRoleID;
+        this.userRoleID_FK = userRoleID;
     }
 
     public int getIsDelete() {

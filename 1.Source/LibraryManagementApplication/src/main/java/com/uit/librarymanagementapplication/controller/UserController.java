@@ -22,9 +22,9 @@ public class UserController {
             UserDTO user = userService.login(userName, password, isAdmin);
             currentFrame.dispose();
             if (isAdmin) {
-                new AdminDashboardFrame();
+                new AdminDashboardFrame(user);
             } else {
-                new AdminDashboardFrame();
+                
             }
         } catch (ApiException e) {
             CommonUI.showError(currentFrame, e);
