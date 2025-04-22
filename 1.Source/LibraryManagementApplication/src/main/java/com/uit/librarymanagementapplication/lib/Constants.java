@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uit.librarymanagementapplication.lib;
 
-/**
- *
- * @author Hieu.Truong
- */
+
 public class Constants {
 
     public static final String ALGORITHM = "AES";
@@ -24,7 +17,7 @@ public class Constants {
         public static final String USER_NOT_FOUND = "No matching user account found in the system.";
         public static final String PASSWORD_NOT_CORRECT = "Invalid username or password.";
         public static final String USER_HAS_BEEN_LOCKED = "Your account has been locked. Please contact the administrator.";
-        public static final String USER_IS_NOT_ADMIN = "Your account login is not internal, Please verify it again.";
+        public static final String USER_IS_NOT_ADMIN = "Your account login is not admin, Please verify it again.";
     }
     
      public class ErrorTitle {

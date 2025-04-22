@@ -1,6 +1,6 @@
 package com.uit.librarymanagementapplication.view.admin;
 
-import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
+import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
 import com.uit.librarymanagementapplication.view.admin.book.BookPanel;
 import com.uit.librarymanagementapplication.view.admin.category.CategoryPanel;
@@ -19,7 +19,6 @@ public class AdminDashboardFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Menu trái
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setPreferredSize(new Dimension(240, getHeight()));
         menuWrapper.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 0));
@@ -54,11 +53,9 @@ public class AdminDashboardFrame extends JFrame {
         menuWrapper.add(menuPanel, BorderLayout.CENTER);
         add(menuWrapper, BorderLayout.WEST);
 
-        // ✅ Nội dung chính có border + padding như menu
         JPanel contentWrapper = new JPanel(new BorderLayout());
         contentWrapper.setBorder(BorderFactory.createEmptyBorder(30, 20, 20, 20));
 
-        // Thêm góc phải trên hiển thị tên người dùng
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         topRightPanel.setLayout(new BoxLayout(topRightPanel, BoxLayout.Y_AXIS));
         topRightPanel.setOpaque(false); // trong suốt
@@ -72,7 +69,6 @@ public class AdminDashboardFrame extends JFrame {
         topRightPanel.add(userLabel1);
         contentWrapper.add(topRightPanel, BorderLayout.NORTH);
 
-        // Nội dung chính
         contentPanel = new JPanel(new BorderLayout());
         JLabel welcomeLabel = new JLabel("Chào mừng Admin!", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -81,7 +77,6 @@ public class AdminDashboardFrame extends JFrame {
         contentWrapper.add(contentPanel, BorderLayout.CENTER);
         add(contentWrapper, BorderLayout.CENTER);
 
-        // Sự kiện nút
         bookBtn.addActionListener(e -> setContent(new BookPanel()));
         authorBtn.addActionListener(e -> setContent(new AuthorPanel()));
         genreBtn.addActionListener(e -> setContent(new CategoryPanel()));

@@ -1,6 +1,6 @@
 package com.uit.librarymanagementapplication.view.admin.lib;
 
-import com.uit.librarymanagementapplication.domain.model.Message;
+import com.uit.librarymanagementapplication.domain.DTO.Message;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import javax.swing.*;
 import java.awt.*;

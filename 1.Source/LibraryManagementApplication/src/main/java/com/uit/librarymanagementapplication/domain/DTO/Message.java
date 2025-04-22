@@ -1,4 +1,4 @@
-package com.uit.librarymanagementapplication.domain.model;
+package com.uit.librarymanagementapplication.domain.DTO;
 
 
 public class Message {

@@ -1,15 +1,15 @@
-package com.uit.librarymanagementapplication.service;
+package com.uit.librarymanagementapplication.service.UserServices;
 
-import com.uit.librarymanagementapplication.domain.DTO.UserDTO;
-import com.uit.librarymanagementapplication.domain.DTO.UserRoleDTO;
+import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
+import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.UtilService;
-import com.uit.librarymanagementapplication.domain.model.User;
-import com.uit.librarymanagementapplication.domain.repository.IUserRepository;
-import com.uit.librarymanagementapplication.domain.repository.UserRepository;
+import com.uit.librarymanagementapplication.domain.entity.User;
+import com.uit.librarymanagementapplication.domain.repository.UserRepositories.IUserRepository;
+import com.uit.librarymanagementapplication.domain.repository.UserRepositories.UserRepository;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants.*;
 import com.uit.librarymanagementapplication.lib.Constants.GeneralStatus;
-import com.uit.librarymanagementapplication.mapper.UserMapper;
+import com.uit.librarymanagementapplication.mapper.IUserMapper;
 
 public class UserService implements IUserService  {
 
@@ -36,7 +36,7 @@ public class UserService implements IUserService  {
         if (user == null) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
         }
-        userDTO = UserMapper.INSTANCE.toDTO(user);
+        userDTO = IUserMapper.INSTANCE.toDTO(user);
            System.out.println("user"+userDTO.getIsAdmin());
         if (isAdmin && userDTO.getIsAdmin() == 0) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_IS_NOT_ADMIN, ErrorMessage.USER_IS_NOT_ADMIN);

@@ -2,8 +2,8 @@ package com.uit.librarymanagementapplication;
 
 import com.uit.librarymanagementapplication.controller.UserController;
 import com.uit.librarymanagementapplication.domain.DbUtils;
-import com.uit.librarymanagementapplication.domain.repository.UserRepository;
-import com.uit.librarymanagementapplication.service.UserService;
+import com.uit.librarymanagementapplication.domain.repository.UserRepositories.UserRepository;
+import com.uit.librarymanagementapplication.service.UserServices.UserService;
 import com.uit.librarymanagementapplication.view.admin.AdminDashboardFrame;
 import com.uit.librarymanagementapplication.view.admin.AdminLoginFrame;
 import com.uit.librarymanagementapplication.view.user.UserLoginFrame;

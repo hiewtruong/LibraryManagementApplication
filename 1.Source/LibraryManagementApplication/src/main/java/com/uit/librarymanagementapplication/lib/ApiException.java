@@ -1,6 +1,6 @@
 package com.uit.librarymanagementapplication.lib;
 
-import com.uit.librarymanagementapplication.domain.model.Message;
+import com.uit.librarymanagementapplication.domain.DTO.Message;
 
 
 public class ApiException extends RuntimeException {

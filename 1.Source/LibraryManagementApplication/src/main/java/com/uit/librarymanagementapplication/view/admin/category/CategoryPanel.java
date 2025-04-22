@@ -9,10 +9,8 @@ import javax.swing.border.EmptyBorder;
 
 public class CategoryPanel extends JPanel {
     public CategoryPanel() {
-        // Thiết lập layout và border
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Quản lý Thể loại"));
-
         JLabel label = new JLabel("Nội dung quản lý thể loại", SwingConstants.CENTER);
         add(label, BorderLayout.CENTER);
     }

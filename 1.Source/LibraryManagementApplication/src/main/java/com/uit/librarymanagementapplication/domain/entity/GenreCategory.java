@@ -1,5 +1,5 @@
 
-package com.uit.librarymanagementapplication.domain.model;
+package com.uit.librarymanagementapplication.domain.entity;
 
 import java.util.Date;
 

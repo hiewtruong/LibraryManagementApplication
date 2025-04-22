@@ -1,37 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.uit.librarymanagementapplication.domain.DTO;
-
-import java.util.Date;
+package com.uit.librarymanagementapplication.domain.DTO.User;
 
 /**
  *
  * @author hieutruong
  */
-public class UserRoleDTO {
-    private int userID;
+public class UserDTO {
+
     private String firstName;
     private String lastName;
     private String userName;
     private String password;
-    private int gender;
     private String email;
     private String phone;
     private String address;
-    private int userRoleID_FK;
     private int isDelete;
     private int isAdmin;
     private String roleName;
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -65,14 +49,6 @@ public class UserRoleDTO {
         this.password = password;
     }
 
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -95,14 +71,6 @@ public class UserRoleDTO {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getUserRoleID_FK() {
-        return userRoleID_FK;
-    }
-
-    public void setUserRoleID_FK(int userRoleID_FK) {
-        this.userRoleID_FK = userRoleID_FK;
     }
 
     public int getIsDelete() {
@@ -129,19 +97,20 @@ public class UserRoleDTO {
         this.roleName = roleName;
     }
 
-    public UserRoleDTO(int userID, String firstName, String lastName, String userName, String password, int gender, String email, String phone, String address, int userRoleID_FK, int isDelete, int isAdmin, String roleName) {
-        this.userID = userID;
+    public UserDTO(String firstName, String lastName, String userName, String password, String email, String phone, String address, int isDelete, int isAdmin, String roleName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
-        this.gender = gender;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.userRoleID_FK = userRoleID_FK;
         this.isDelete = isDelete;
         this.isAdmin = isAdmin;
         this.roleName = roleName;
     }
+
+    
+
+  
 }
