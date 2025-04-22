@@ -18,7 +18,7 @@ public class UserService implements IUserService  {
     private static UserService instance;
 
     public UserService() {
-        this.userRepository = UserRepository.getInstance(); // sử dụng interface thay vì new trực tiếp
+        this.userRepository = UserRepository.getInstance();
     }
 
     public static UserService getInstance() {
@@ -37,7 +37,7 @@ public class UserService implements IUserService  {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
         }
         userDTO = IUserMapper.INSTANCE.toDTO(user);
-           System.out.println("user"+userDTO.getIsAdmin());
+       
         if (isAdmin && userDTO.getIsAdmin() == 0) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_IS_NOT_ADMIN, ErrorMessage.USER_IS_NOT_ADMIN);
         }

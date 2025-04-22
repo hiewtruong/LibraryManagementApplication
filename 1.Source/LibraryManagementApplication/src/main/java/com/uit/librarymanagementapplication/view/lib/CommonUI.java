@@ -1,4 +1,4 @@
-package com.uit.librarymanagementapplication.view.admin.lib;
+package com.uit.librarymanagementapplication.view.lib;
 
 import com.uit.librarymanagementapplication.domain.DTO.Message;
 import com.uit.librarymanagementapplication.lib.ApiException;
