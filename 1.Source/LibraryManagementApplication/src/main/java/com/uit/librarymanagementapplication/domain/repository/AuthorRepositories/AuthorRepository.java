@@ -31,7 +31,7 @@ public class AuthorRepository implements IAuthorRepository {
     @Override
     public List<Author> getAllAuthors() {
         List<Author> authors = new ArrayList<>();
-        String sql = "SELECT * FROM [dbo].[Authors] WHERE IsDelete = 0";
+        String sql = "SELECT * FROM [dbo].[Authors] WHERE IsDelete = 0 ORDER BY AuthorID desc";
 
         try (
                 Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
@@ -81,5 +81,36 @@ public class AuthorRepository implements IAuthorRepository {
             DbUtils.close();
         }
         return false;
+    }
+
+    @Override
+    public List<Author> getAuthorsByName(String keyword) {
+        List<Author> authors = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Authors] WHERE AuthorName LIKE ? AND IsDelete = 0 ORDER BY AuthorID desc";
+
+        try (
+            Connection conn = DbUtils.getConnection(); 
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Author author = new Author();
+                    author.setAuthorID(rs.getInt("AuthorID"));
+                    author.setAuthorName(rs.getString("AuthorName"));
+                    author.setIsDelete(rs.getInt("IsDelete"));
+                    author.setCreatedDt(rs.getTimestamp("CreatedDt"));
+                    author.setCreatedBy(rs.getString("CreatedBy"));
+                    author.setUpdateDt(rs.getTimestamp("UpdateDt"));
+                    author.setUpdateBy(rs.getString("UpdateBy"));
+                    authors.add(author);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.close();
+        }
+        return authors;
     }
 }

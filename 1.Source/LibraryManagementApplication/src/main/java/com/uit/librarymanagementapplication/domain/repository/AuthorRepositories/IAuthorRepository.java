@@ -17,5 +17,7 @@ public interface IAuthorRepository {
     
     List<Author> getAllAuthors();
     
+    List<Author> getAuthorsByName(String keyword);
+    
     boolean createAuthor(Author author);
 }

@@ -11,6 +11,7 @@ import com.uit.librarymanagementapplication.domain.repository.AuthorRepositories
 import com.uit.librarymanagementapplication.domain.repository.AuthorRepositories.IAuthorRepository;
 import com.uit.librarymanagementapplication.domain.repository.UserRepositories.IUserRepository;
 import com.uit.librarymanagementapplication.domain.repository.UserRepositories.UserRepository;
+import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.mapper.IAuthorMapper;
 import com.uit.librarymanagementapplication.service.UserServices.IUserService;
 import com.uit.librarymanagementapplication.service.UserServices.UserService;
@@ -39,14 +40,22 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public List<AuthorDTO> getAuthorByName(String authorName) {
-        List<AuthorDTO> result = new  ArrayList<AuthorDTO>();
-        if (authorName == "") {
-            List<Author> dbResult = authorRepository.getAllAuthors();
-            result = IAuthorMapper.INSTANCE.toDTOList(dbResult);
+    public List<AuthorDTO> getAuthorByName(String keyword) {
+        List<AuthorDTO> result = new ArrayList<AuthorDTO>();
+        List<Author> dbResult = new ArrayList<Author>();
+        if (keyword == "") {
+            dbResult = authorRepository.getAllAuthors();
         } else {
-
+            dbResult = authorRepository.getAuthorsByName(keyword);
         }
-        return result;
+        return IAuthorMapper.INSTANCE.toDTOList(dbResult);
+    }
+
+    @Override
+    public boolean createAuthors(String authorName) {
+        boolean isSuccess = false;
+        Author request = new Author(authorName,Constants.ADMIN,Constants.ADMIN);
+        isSuccess = authorRepository.createAuthor(request);
+        return isSuccess;
     }
 }

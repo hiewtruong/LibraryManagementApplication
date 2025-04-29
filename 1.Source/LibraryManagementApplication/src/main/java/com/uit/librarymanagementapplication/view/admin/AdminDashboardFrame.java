@@ -2,11 +2,13 @@ package com.uit.librarymanagementapplication.view.admin;
 
 import com.uit.librarymanagementapplication.controller.AuthorController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
+import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
 import com.uit.librarymanagementapplication.view.admin.book.BookPanel;
 import com.uit.librarymanagementapplication.view.admin.category.CategoryPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.CreateTransactionLoanPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionLoanPanel;
+import com.uit.librarymanagementapplication.view.lib.CommonUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,17 +33,21 @@ public class AdminDashboardFrame extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBorder(BorderFactory.createTitledBorder("Menu"));
 
-        JButton bookBtn = new JButton("Quản lý Sách");
-        JButton authorBtn = new JButton("Quản lý Tác giả");
-        JButton genreBtn = new JButton("Quản lý Thể loại");
-        JButton transactionLoanBtn = new JButton("Quản lý Đơn thuê/mượn sách");
-        JButton crtTransactionLoanBtn = new JButton("Tạo đơn thuê/mượn sách");
-        JButton exitBtn = new JButton("Thoát");
+        JButton bookBtn = new JButton("Management Book");
+        JButton authorBtn = new JButton("Management Author");
+        JButton genreBtn = new JButton("Management Category");
+        JButton transactionLoanBtn = new JButton("Management Trans Loan");
+        JButton crtTransactionLoanBtn = new JButton("Create Trans Loan");
+        JButton exitBtn = new JButton("EXIT");
+        exitBtn.setForeground(Color.RED);
+        exitBtn.setFocusPainted(false);
+        exitBtn.setOpaque(true);
+        exitBtn.setContentAreaFilled(true);
 
         Dimension btnSize = new Dimension(180, 30);
         Insets btnInsets = new Insets(5, 10, 5, 10);
 
-        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn,transactionLoanBtn,crtTransactionLoanBtn}) {
+        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn, transactionLoanBtn, crtTransactionLoanBtn}) {
             btn.setMaximumSize(btnSize);
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMargin(btnInsets);
@@ -64,19 +70,19 @@ public class AdminDashboardFrame extends JFrame {
 
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         topRightPanel.setLayout(new BoxLayout(topRightPanel, BoxLayout.Y_AXIS));
-        topRightPanel.setOpaque(false); // trong suốt
+        topRightPanel.setOpaque(false);
         JLabel userLabel = new JLabel(user.getUserName());
-        JLabel userLabel1 = new JLabel("Role: "+user.getRoleName());
+        JLabel userLabel1 = new JLabel("Role: " + user.getRoleName());
         userLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         userLabel.setForeground(Color.GRAY);
-        userLabel.setAlignmentX(Component.RIGHT_ALIGNMENT); 
-        userLabel1.setAlignmentX(Component.RIGHT_ALIGNMENT); 
+        userLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        userLabel1.setAlignmentX(Component.RIGHT_ALIGNMENT);
         topRightPanel.add(userLabel);
         topRightPanel.add(userLabel1);
         contentWrapper.add(topRightPanel, BorderLayout.NORTH);
 
         contentPanel = new JPanel(new BorderLayout());
-        JLabel welcomeLabel = new JLabel("Chào mừng Admin!", SwingConstants.CENTER);
+        JLabel welcomeLabel = new JLabel("Welcome Admin!", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
         contentPanel.add(welcomeLabel, BorderLayout.CENTER);
 
@@ -84,16 +90,15 @@ public class AdminDashboardFrame extends JFrame {
         add(contentWrapper, BorderLayout.CENTER);
 
         this.authorController = new AuthorController();
-        
+
         bookBtn.addActionListener(e -> setContent(new BookPanel()));
         authorBtn.addActionListener(e -> {
-            // Gọi phương thức init từ AuthorController, truyền frame hiện tại
-            authorController.Init(contentPanel);
+            authorController.Init(contentPanel, false);
         });
         genreBtn.addActionListener(e -> setContent(new CategoryPanel()));
         transactionLoanBtn.addActionListener(e -> setContent(new TransactionLoanPanel()));
         crtTransactionLoanBtn.addActionListener(e -> setContent(new CreateTransactionLoanPanel()));
-        exitBtn.addActionListener(e -> System.exit(0));
+        exitBtn.addActionListener(e -> handleExit());
 
         setVisible(true);
     }
@@ -103,5 +108,12 @@ public class AdminDashboardFrame extends JFrame {
         contentPanel.add(panel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    private void handleExit() {
+        int response = CommonUI.showConfirmDialog(this, Constants.ConfirmConsts.CONFIRM_EXIT_CONTENT, Constants.ConfirmConsts.CONFIRM_TITLE);
+        if (response == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } 
     }
 }

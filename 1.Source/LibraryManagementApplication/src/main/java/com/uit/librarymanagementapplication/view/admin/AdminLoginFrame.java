@@ -24,18 +24,12 @@ public class AdminLoginFrame extends JFrame {
     }
 
     private void initUI() {
-        // Tạo split pane chia đôi màn hình
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerLocation(500);
-        splitPane.setDividerSize(0); // Không cho resize
+        splitPane.setDividerSize(0);
 
-        // Panel bên trái: ảnh nền
         JLabel imageLabel = new JLabel();
         URL imageUrl = getClass().getResource("/img/login_image.jpg");
-        if (imageUrl == null) {
-            System.out.println("Không tìm thấy file login_image.jpg trong thư mục img");
-            return;
-        }
         ImageIcon originalIcon = new ImageIcon(imageUrl);
         Image scaledImage = originalIcon.getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(scaledImage));
@@ -53,13 +47,13 @@ public class AdminLoginFrame extends JFrame {
 
         usernameField = new JTextField();
         usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        usernameField.setBorder(BorderFactory.createTitledBorder("Tài Khoản"));
+        usernameField.setBorder(BorderFactory.createTitledBorder("Username"));
 
         passwordField = new JPasswordField();
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        passwordField.setBorder(BorderFactory.createTitledBorder("Mật Khẩu"));
+        passwordField.setBorder(BorderFactory.createTitledBorder("Password"));
 
-        JButton loginButton = new JButton("Đăng nhập");
+        JButton loginButton = new JButton("Login");
         loginButton.setBackground(new Color(0, 102, 255));
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Arial", Font.BOLD, 14));

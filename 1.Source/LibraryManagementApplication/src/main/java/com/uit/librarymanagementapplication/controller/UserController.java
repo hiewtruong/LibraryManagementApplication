@@ -27,7 +27,7 @@ public class UserController {
                 
             }
         } catch (ApiException e) {
-            CommonUI.showError(currentFrame, e);
+            CommonUI.showErrorApi(currentFrame, e);
         }
     }
 }

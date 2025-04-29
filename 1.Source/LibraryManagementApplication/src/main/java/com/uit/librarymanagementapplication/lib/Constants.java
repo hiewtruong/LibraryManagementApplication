@@ -4,6 +4,7 @@ package com.uit.librarymanagementapplication.lib;
 public class Constants {
 
     public static final String ALGORITHM = "AES";
+    public static final String ADMIN = "admin@uit.com";
 
     public class ErrorCode {
 
@@ -31,4 +32,13 @@ public class Constants {
         public static final int DELETE = 1;
     }
     
+    public class DateFormat {
+        public static final String MMddyyyy = "MM/dd/yyyy";
+    }
+    
+    public class ConfirmConsts{
+        public static final String CONFIRM_TITLE  = "Confirm";
+        public static final String CONFIRM_CONTENT  = "Are you want to save?";
+        public static final String CONFIRM_EXIT_CONTENT  = "Are you want to exit?";
+    }
 }

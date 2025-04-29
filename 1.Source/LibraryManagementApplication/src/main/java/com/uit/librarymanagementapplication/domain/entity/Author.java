@@ -21,6 +21,14 @@ public class Author {
 
     public Author() {
     }
+
+    public Author(String authorName, String createdBy, String updateBy) {
+        this.authorName = authorName;
+        this.createdBy = createdBy;
+        this.updateBy = updateBy;
+    }
+    
+    
     
     public Author(int authorID, String authorName, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
         this.authorID = authorID;

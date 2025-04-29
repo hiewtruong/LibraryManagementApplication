@@ -14,4 +14,6 @@ import java.util.List;
 public interface IAuthorService {
     
     List<AuthorDTO> getAuthorByName(String authorName);
+    
+    boolean createAuthors(String authorName);
 }
