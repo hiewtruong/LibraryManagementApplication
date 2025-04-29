@@ -8,6 +8,7 @@ import com.uit.librarymanagementapplication.view.admin.book.BookPanel;
 import com.uit.librarymanagementapplication.view.admin.category.CategoryPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.CreateTransactionLoanPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionLoanPanel;
+import com.uit.librarymanagementapplication.view.admin.user.UserPanel;
 import com.uit.librarymanagementapplication.view.lib.CommonUI;
 
 import javax.swing.*;
@@ -36,6 +37,7 @@ public class AdminDashboardFrame extends JFrame {
         JButton bookBtn = new JButton("Management Book");
         JButton authorBtn = new JButton("Management Author");
         JButton genreBtn = new JButton("Management Category");
+        JButton userBtnUser = new JButton("Management User");
         JButton transactionLoanBtn = new JButton("Management Trans Loan");
         JButton crtTransactionLoanBtn = new JButton("Create Trans Loan");
         JButton exitBtn = new JButton("EXIT");
@@ -47,7 +49,7 @@ public class AdminDashboardFrame extends JFrame {
         Dimension btnSize = new Dimension(180, 30);
         Insets btnInsets = new Insets(5, 10, 5, 10);
 
-        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn, transactionLoanBtn, crtTransactionLoanBtn}) {
+        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn, userBtnUser,transactionLoanBtn, crtTransactionLoanBtn}) {
             btn.setMaximumSize(btnSize);
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMargin(btnInsets);
@@ -98,6 +100,7 @@ public class AdminDashboardFrame extends JFrame {
         genreBtn.addActionListener(e -> setContent(new CategoryPanel()));
         transactionLoanBtn.addActionListener(e -> setContent(new TransactionLoanPanel()));
         crtTransactionLoanBtn.addActionListener(e -> setContent(new CreateTransactionLoanPanel()));
+        userBtnUser.addActionListener(e -> setContent(new UserPanel()));
         exitBtn.addActionListener(e -> handleExit());
 
         setVisible(true);
