@@ -1,9 +1,12 @@
 package com.uit.librarymanagementapplication.view.admin;
 
+import com.uit.librarymanagementapplication.controller.AuthorController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
 import com.uit.librarymanagementapplication.view.admin.book.BookPanel;
 import com.uit.librarymanagementapplication.view.admin.category.CategoryPanel;
+import com.uit.librarymanagementapplication.view.admin.transactionLoan.CreateTransactionLoanPanel;
+import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionLoanPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +14,7 @@ import java.awt.*;
 public class AdminDashboardFrame extends JFrame {
 
     private JPanel contentPanel;
+    private AuthorController authorController;
 
     public AdminDashboardFrame(UserDTO user) {
         setTitle("Admin Dashboard");
@@ -30,12 +34,14 @@ public class AdminDashboardFrame extends JFrame {
         JButton bookBtn = new JButton("Quản lý Sách");
         JButton authorBtn = new JButton("Quản lý Tác giả");
         JButton genreBtn = new JButton("Quản lý Thể loại");
+        JButton transactionLoanBtn = new JButton("Quản lý Đơn thuê/mượn sách");
+        JButton crtTransactionLoanBtn = new JButton("Tạo đơn thuê/mượn sách");
         JButton exitBtn = new JButton("Thoát");
 
         Dimension btnSize = new Dimension(180, 30);
         Insets btnInsets = new Insets(5, 10, 5, 10);
 
-        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn}) {
+        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn,transactionLoanBtn,crtTransactionLoanBtn}) {
             btn.setMaximumSize(btnSize);
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMargin(btnInsets);
@@ -77,9 +83,16 @@ public class AdminDashboardFrame extends JFrame {
         contentWrapper.add(contentPanel, BorderLayout.CENTER);
         add(contentWrapper, BorderLayout.CENTER);
 
+        this.authorController = new AuthorController();
+        
         bookBtn.addActionListener(e -> setContent(new BookPanel()));
-        authorBtn.addActionListener(e -> setContent(new AuthorPanel()));
+        authorBtn.addActionListener(e -> {
+            // Gọi phương thức init từ AuthorController, truyền frame hiện tại
+            authorController.Init(contentPanel);
+        });
         genreBtn.addActionListener(e -> setContent(new CategoryPanel()));
+        transactionLoanBtn.addActionListener(e -> setContent(new TransactionLoanPanel()));
+        crtTransactionLoanBtn.addActionListener(e -> setContent(new CreateTransactionLoanPanel()));
         exitBtn.addActionListener(e -> System.exit(0));
 
         setVisible(true);

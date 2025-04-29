@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 
 public class UserController {
 
-  IUserService userService = UserService.getInstance();
+    IUserService userService = UserService.getInstance();
 
     public UserController() {
 

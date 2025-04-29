@@ -4,6 +4,7 @@ import com.uit.librarymanagementapplication.controller.UserController;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class AdminLoginFrame extends JFrame {
 
@@ -30,7 +31,12 @@ public class AdminLoginFrame extends JFrame {
 
         // Panel bên trái: ảnh nền
         JLabel imageLabel = new JLabel();
-        ImageIcon originalIcon = new ImageIcon("login_image.jpg");
+        URL imageUrl = getClass().getResource("/img/login_image.jpg");
+        if (imageUrl == null) {
+            System.out.println("Không tìm thấy file login_image.jpg trong thư mục img");
+            return;
+        }
+        ImageIcon originalIcon = new ImageIcon(imageUrl);
         Image scaledImage = originalIcon.getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(scaledImage));
         splitPane.setLeftComponent(imageLabel);

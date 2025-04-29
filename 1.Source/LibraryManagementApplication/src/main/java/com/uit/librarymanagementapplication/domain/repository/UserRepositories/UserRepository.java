@@ -41,7 +41,7 @@ public class UserRepository implements IUserRepository {
                 + "JOIN [dbo].[UserRoles] r ON u.UserRoleID_FK = r.UserRoleID "
                 + "WHERE u.UserName = ? AND u.IsDelete = 0";
         try (
-                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
