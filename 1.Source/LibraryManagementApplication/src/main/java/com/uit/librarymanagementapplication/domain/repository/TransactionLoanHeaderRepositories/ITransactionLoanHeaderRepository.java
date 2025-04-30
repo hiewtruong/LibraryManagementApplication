@@ -15,4 +15,6 @@ import java.util.List;
 public interface ITransactionLoanHeaderRepository {
     
     List<TransactionLoanHeaderDTO> getAllTransHeader();
+    
+    List<TransactionLoanHeaderDTO> getAllTransHeaderByKeyWord(String keyword, String column);
 }

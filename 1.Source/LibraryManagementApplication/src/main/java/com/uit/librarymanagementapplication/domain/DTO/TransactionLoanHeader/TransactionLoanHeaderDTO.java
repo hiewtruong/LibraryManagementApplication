@@ -41,6 +41,10 @@ public class TransactionLoanHeaderDTO {
         this.updateDt = updateDt;
     }
 
+    public TransactionLoanHeaderDTO() {
+        
+    }
+
     public String getUseName() {
         return useName;
     }

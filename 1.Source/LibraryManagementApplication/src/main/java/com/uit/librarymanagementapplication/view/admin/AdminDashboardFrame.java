@@ -1,6 +1,7 @@
 package com.uit.librarymanagementapplication.view.admin;
 
 import com.uit.librarymanagementapplication.controller.AuthorController;
+import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
@@ -18,6 +19,7 @@ public class AdminDashboardFrame extends JFrame {
 
     private JPanel contentPanel;
     private AuthorController authorController;
+    private TransacitonLoanController transacitonLoanController;
 
     public AdminDashboardFrame(UserDTO user) {
         setTitle("Admin Dashboard");
@@ -49,7 +51,7 @@ public class AdminDashboardFrame extends JFrame {
         Dimension btnSize = new Dimension(180, 30);
         Insets btnInsets = new Insets(5, 10, 5, 10);
 
-        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn, userBtnUser,transactionLoanBtn, crtTransactionLoanBtn}) {
+        for (JButton btn : new JButton[]{bookBtn, authorBtn, genreBtn, userBtnUser, transactionLoanBtn, crtTransactionLoanBtn}) {
             btn.setMaximumSize(btnSize);
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMargin(btnInsets);
@@ -92,14 +94,19 @@ public class AdminDashboardFrame extends JFrame {
         add(contentWrapper, BorderLayout.CENTER);
 
         this.authorController = new AuthorController();
+        this.transacitonLoanController = new TransacitonLoanController();
 
         bookBtn.addActionListener(e -> setContent(new BookPanel()));
         authorBtn.addActionListener(e -> {
             authorController.Init(contentPanel, false);
         });
         genreBtn.addActionListener(e -> setContent(new CategoryPanel()));
-        transactionLoanBtn.addActionListener(e -> setContent(new TransactionLoanPanel()));
-        crtTransactionLoanBtn.addActionListener(e -> setContent(new CreateTransactionLoanPanel()));
+        transactionLoanBtn.addActionListener(e -> {
+            transacitonLoanController.Init(contentPanel, false);
+        });
+        crtTransactionLoanBtn.addActionListener(e -> {
+            transacitonLoanController.CreateTransactionLoan(contentPanel, false);
+        });
         userBtnUser.addActionListener(e -> setContent(new UserPanel()));
         exitBtn.addActionListener(e -> handleExit());
 
@@ -117,6 +124,6 @@ public class AdminDashboardFrame extends JFrame {
         int response = CommonUI.showConfirmDialog(this, Constants.ConfirmConsts.CONFIRM_EXIT_CONTENT, Constants.ConfirmConsts.CONFIRM_TITLE);
         if (response == JOptionPane.YES_OPTION) {
             System.exit(0);
-        } 
+        }
     }
 }
