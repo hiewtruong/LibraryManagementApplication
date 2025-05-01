@@ -4,13 +4,17 @@
  */
 package com.uit.librarymanagementapplication.controller;
 
-import com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.ITransactionLoanService;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.TransactionLoanService;
+import com.uit.librarymanagementapplication.view.admin.author.CreateAuthorModal;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.CreateTransactionLoanPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionLoanPanel;
+import com.uit.librarymanagementapplication.view.admin.transactionLoan.ViewTransactionLoanDetailModal;
 import java.awt.BorderLayout;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -35,9 +39,9 @@ public class TransacitonLoanController {
             contentPanel.repaint();
         }
     }
-    
+
     public void CreateTransactionLoan(JPanel contentPanel, boolean forceReload) {
-      if (forceReload || !(contentPanel.getComponentCount() > 0 && contentPanel.getComponent(0) instanceof CreateTransactionLoanPanel)) {
+        if (forceReload || !(contentPanel.getComponentCount() > 0 && contentPanel.getComponent(0) instanceof CreateTransactionLoanPanel)) {
             contentPanel.removeAll();
             CreateTransactionLoanPanel createTranPanel = new CreateTransactionLoanPanel(contentPanel);
             contentPanel.setLayout(new BorderLayout());
@@ -45,5 +49,11 @@ public class TransacitonLoanController {
             contentPanel.revalidate();
             contentPanel.repaint();
         }
+    }
+
+    public void ViewTransactionLoan(JFrame parentFrame, JPanel contentPanel, TransactionLoanHeaderDTO headerDto) {
+        List<TransactionLoanDetailDTO> details = transService.getAllTransDetails(headerDto.getLoanHeaderID());
+        ViewTransactionLoanDetailModal dialog = new ViewTransactionLoanDetailModal(parentFrame, contentPanel, headerDto, details);
+        dialog.setVisible(true);
     }
 }

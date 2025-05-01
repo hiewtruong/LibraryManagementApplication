@@ -1,7 +1,7 @@
 package com.uit.librarymanagementapplication.view.admin.transactionLoan;
 
 import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
-import com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.lib.Constants.DateFormat;
 import com.uit.librarymanagementapplication.lib.FormatHelper;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.ITransactionLoanService;
@@ -21,6 +21,7 @@ public class TransactionLoanPanel extends JPanel {
     ITransactionLoanService transService = TransactionLoanService.getInstance();
     TransacitonLoanController controller = new TransacitonLoanController();
     private JPanel contentPanel;
+
 
     private JTextField searchField;
     private JButton searchButton;
@@ -108,6 +109,7 @@ public class TransactionLoanPanel extends JPanel {
             }
         }
 
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         transactionTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -115,13 +117,12 @@ public class TransactionLoanPanel extends JPanel {
                 int row = transactionTable.rowAtPoint(e.getPoint());
                 if (column == 0) {
                     TransactionLoanHeaderDTO trans = transHeaders.get(row);
-                    System.out.println("trans"+trans.getLoanHeaderID());
-                    //controller.CreateTransactionLoan(contentPanel, true, trans);
+                    controller.ViewTransactionLoan(parentFrame, contentPanel, trans);
                 }
             }
         });
 
-        transactionTable.getColumnModel().getColumn(0).setPreferredWidth(50); 
+        transactionTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMinWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMaxWidth(50);
 
@@ -229,6 +230,7 @@ public class TransactionLoanPanel extends JPanel {
     }
 
     private class HyperlinkRenderer extends DefaultTableCellRenderer {
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

@@ -1,6 +1,6 @@
 package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories;
 
-import com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -4,7 +4,7 @@
  */
 package com.uit.librarymanagementapplication.view.admin.transactionLoan;
 
-import com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.BorderFactory;

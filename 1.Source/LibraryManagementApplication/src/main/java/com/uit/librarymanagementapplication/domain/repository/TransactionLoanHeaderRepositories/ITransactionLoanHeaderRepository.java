@@ -4,7 +4,7 @@
  */
 package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories;
 
-import com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.entity.Author;
 import java.util.List;
 

@@ -15,6 +15,11 @@ public class GenreCategory {
     private Date updateDt;
     private String updateBy;
 
+    public GenreCategory() {
+    }
+
+    
+    
     public GenreCategory(int genreCategoryID, String nameCategory, String genreCategory, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
         this.genreCategoryID = genreCategoryID;
         this.nameCategory = nameCategory;

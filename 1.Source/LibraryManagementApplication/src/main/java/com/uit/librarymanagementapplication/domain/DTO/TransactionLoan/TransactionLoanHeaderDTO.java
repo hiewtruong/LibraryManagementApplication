@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.uit.librarymanagementapplication.domain.DTO.TransactionLoanHeader;
+package com.uit.librarymanagementapplication.domain.DTO.TransactionLoan;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Hieu.Truong
  */
 public class TransactionLoanHeaderDTO {
-   private int loanHeaderID;
+    private int loanHeaderID;
     private String loanTicketNumber;
     private int userID;
     private String useName;
