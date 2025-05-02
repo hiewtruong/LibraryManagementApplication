@@ -24,8 +24,32 @@ public class TransactionLoanHeaderDTO {
     private Date createdDt;
     private String updateBy;
     private Date updateDt;
+    private int status;
+    private String statusName;
 
-    public TransactionLoanHeaderDTO(int loanHeaderID, String loanTicketNumber, int userID, String useName, String email, String phone, int totalQty, Date loanDt, Date loanReturnDt, String createdBy, Date createdDt, String updateBy, Date updateDt) {
+   
+
+    public TransactionLoanHeaderDTO() {
+        
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public TransactionLoanHeaderDTO(int loanHeaderID, String loanTicketNumber, int userID, String useName, String email, String phone, int totalQty, Date loanDt, Date loanReturnDt, String createdBy, Date createdDt, String updateBy, Date updateDt, int status, String statusName) {
         this.loanHeaderID = loanHeaderID;
         this.loanTicketNumber = loanTicketNumber;
         this.userID = userID;
@@ -39,11 +63,11 @@ public class TransactionLoanHeaderDTO {
         this.createdDt = createdDt;
         this.updateBy = updateBy;
         this.updateDt = updateDt;
+        this.status = status;
+        this.statusName = statusName;
     }
-
-    public TransactionLoanHeaderDTO() {
-        
-    }
+    
+    
 
     public String getUseName() {
         return useName;

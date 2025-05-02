@@ -10,6 +10,8 @@ import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants.*;
 import com.uit.librarymanagementapplication.lib.Constants.GeneralStatus;
 import com.uit.librarymanagementapplication.mapper.IUserMapper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService implements IUserService  {
 
@@ -58,5 +60,10 @@ public class UserService implements IUserService  {
             isValid = true;
         }
         return isValid;
+    }
+
+    @Override
+    public List<UserRoleDTO> getAllUsers() {
+       return userRepository.getAllUsers();
     }
 }

@@ -22,7 +22,6 @@ public class TransactionLoanPanel extends JPanel {
     TransacitonLoanController controller = new TransacitonLoanController();
     private JPanel contentPanel;
 
-
     private JTextField searchField;
     private JButton searchButton;
     private JButton createButton;
@@ -31,6 +30,12 @@ public class TransactionLoanPanel extends JPanel {
     private JLabel totalLabel;
     private JComboBox<String> searchColumnComboBox;
     private Map<String, String> columnMapping;
+
+    // Định nghĩa hằng số cho trạng thái
+    public static class TransLoanStatusConsts {
+        public static final int BORROW = 0;
+        public static final int PAID = 1;
+    }
 
     public TransactionLoanPanel(List<TransactionLoanHeaderDTO> transHeaders, JPanel contentPanel) {
         this.contentPanel = contentPanel;
@@ -77,8 +82,9 @@ public class TransactionLoanPanel extends JPanel {
         topPanel.add(rightPanel, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
+        // Di chuyển cột "Status" lên sau "Loan Ticket Number"
         String[] columnNames = {
-            "View", "Loan Header ID", "Loan Ticket Number", "User Name", "Email",
+            "View", "Loan Header ID", "Loan Ticket Number", "Status", "User Name", "Email",
             "Phone", "Total Qty", "Loan Date", "Return Date", "Created By",
             "Created Date", "Updated By", "Updated Date"
         };
@@ -122,6 +128,7 @@ public class TransactionLoanPanel extends JPanel {
             }
         });
 
+        // Cài đặt kích thước cột
         transactionTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMinWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMaxWidth(50);
@@ -134,29 +141,30 @@ public class TransactionLoanPanel extends JPanel {
         transactionTable.getColumnModel().getColumn(2).setMinWidth(200);
         transactionTable.getColumnModel().getColumn(2).setMaxWidth(200);
 
-        transactionTable.getColumnModel().getColumn(3).setPreferredWidth(120);
-        transactionTable.getColumnModel().getColumn(3).setMinWidth(120);
-        transactionTable.getColumnModel().getColumn(3).setMaxWidth(120);
+        // Kích thước cho cột "Status"
+        transactionTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        transactionTable.getColumnModel().getColumn(3).setMinWidth(100);
+        transactionTable.getColumnModel().getColumn(3).setMaxWidth(100);
 
-        transactionTable.getColumnModel().getColumn(4).setPreferredWidth(200);
-        transactionTable.getColumnModel().getColumn(4).setMinWidth(200);
-        transactionTable.getColumnModel().getColumn(4).setMaxWidth(200);
+        transactionTable.getColumnModel().getColumn(4).setPreferredWidth(120);
+        transactionTable.getColumnModel().getColumn(4).setMinWidth(120);
+        transactionTable.getColumnModel().getColumn(4).setMaxWidth(120);
 
-        transactionTable.getColumnModel().getColumn(5).setPreferredWidth(120);
-        transactionTable.getColumnModel().getColumn(5).setMinWidth(120);
-        transactionTable.getColumnModel().getColumn(5).setMaxWidth(120);
+        transactionTable.getColumnModel().getColumn(5).setPreferredWidth(200);
+        transactionTable.getColumnModel().getColumn(5).setMinWidth(200);
+        transactionTable.getColumnModel().getColumn(5).setMaxWidth(200);
 
-        transactionTable.getColumnModel().getColumn(6).setPreferredWidth(100);
-        transactionTable.getColumnModel().getColumn(6).setMinWidth(100);
-        transactionTable.getColumnModel().getColumn(6).setMaxWidth(100);
+        transactionTable.getColumnModel().getColumn(6).setPreferredWidth(120);
+        transactionTable.getColumnModel().getColumn(6).setMinWidth(120);
+        transactionTable.getColumnModel().getColumn(6).setMaxWidth(120);
 
-        transactionTable.getColumnModel().getColumn(7).setPreferredWidth(80);
-        transactionTable.getColumnModel().getColumn(7).setMinWidth(80);
-        transactionTable.getColumnModel().getColumn(7).setMaxWidth(80);
+        transactionTable.getColumnModel().getColumn(7).setPreferredWidth(100);
+        transactionTable.getColumnModel().getColumn(7).setMinWidth(100);
+        transactionTable.getColumnModel().getColumn(7).setMaxWidth(100);
 
-        transactionTable.getColumnModel().getColumn(8).setPreferredWidth(100);
-        transactionTable.getColumnModel().getColumn(8).setMinWidth(100);
-        transactionTable.getColumnModel().getColumn(8).setMaxWidth(100);
+        transactionTable.getColumnModel().getColumn(8).setPreferredWidth(80);
+        transactionTable.getColumnModel().getColumn(8).setMinWidth(80);
+        transactionTable.getColumnModel().getColumn(8).setMaxWidth(80);
 
         transactionTable.getColumnModel().getColumn(9).setPreferredWidth(100);
         transactionTable.getColumnModel().getColumn(9).setMinWidth(100);
@@ -173,6 +181,10 @@ public class TransactionLoanPanel extends JPanel {
         transactionTable.getColumnModel().getColumn(12).setPreferredWidth(100);
         transactionTable.getColumnModel().getColumn(12).setMinWidth(100);
         transactionTable.getColumnModel().getColumn(12).setMaxWidth(100);
+
+        transactionTable.getColumnModel().getColumn(13).setPreferredWidth(100);
+        transactionTable.getColumnModel().getColumn(13).setMinWidth(100);
+        transactionTable.getColumnModel().getColumn(13).setMaxWidth(100);
 
         JScrollPane scrollPane = new JScrollPane(transactionTable);
         scrollPane.setBorder(null);
@@ -201,6 +213,7 @@ public class TransactionLoanPanel extends JPanel {
                 "View",
                 trans.getLoanHeaderID(),
                 trans.getLoanTicketNumber(),
+                trans.getStatusName(),
                 trans.getUseName(),
                 trans.getEmail(),
                 trans.getPhone(),

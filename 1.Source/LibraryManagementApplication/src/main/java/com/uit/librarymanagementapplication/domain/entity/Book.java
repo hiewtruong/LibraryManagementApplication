@@ -22,6 +22,10 @@ public class Book {
     private Date updateDt;
     private String updateBy;
 
+    public Book() {
+    }
+
+    
     public Book(int bookID, String title, String author, String cover, String landingPage, String hashtag, String genreCategory, String publisher, Date publishYear, String location, int isDisplay, int qtyOH, int qtyAllocated, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
         this.bookID = bookID;
         this.title = title;

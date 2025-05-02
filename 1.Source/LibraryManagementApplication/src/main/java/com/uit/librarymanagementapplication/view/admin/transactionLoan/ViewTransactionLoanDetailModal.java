@@ -19,6 +19,7 @@ public class ViewTransactionLoanDetailModal extends JDialog {
     private JPanel contentPanel;
 
     private JButton btnClose;
+    private JButton btnRevoke;
 
     public ViewTransactionLoanDetailModal(JFrame parentFrame, JPanel contentPanel, TransactionLoanHeaderDTO headerDto, List<TransactionLoanDetailDTO> detailsDto) {
         super(parentFrame, "Transaction Loan Details", true);
@@ -32,13 +33,10 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         setSize(1000, 450);
         setLayout(new BorderLayout(10, 10));
 
-        Color backgroundColor = new Color(242, 242, 242);
-        getContentPane().setBackground(backgroundColor);
-
+        // Xóa biến backgroundColor và các đoạn setBackground
         JPanel headerPanel = new JPanel(new GridBagLayout());
-        headerPanel.setBackground(backgroundColor);
         headerPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Transaction Loan Information-"+headerDto.getLoanTicketNumber()),
+                BorderFactory.createTitledBorder("Transaction Loan Information-" + headerDto.getLoanTicketNumber()),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         headerPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -51,7 +49,7 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         gbc.anchor = GridBagConstraints.WEST;
 
         Font boldFont = new Font("Arial", Font.BOLD, 14);
-        Font normalFont = new Font("Arial",Font.PLAIN, 14);
+        Font normalFont = new Font("Arial", Font.PLAIN, 14);
 
         int row = 0;
 
@@ -80,7 +78,7 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         JLabel lblEmail = new JLabel("Email:");
         lblEmail.setFont(boldFont);
         headerPanel.add(lblEmail, gbc);
-        gbc.gridx = 5;        
+        gbc.gridx = 5;
         JLabel lblEmailValue = new JLabel(headerDto.getEmail());
         lblEmailValue.setFont(normalFont);
         headerPanel.add(lblEmailValue, gbc);
@@ -91,7 +89,7 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         JLabel lblPhone = new JLabel("Phone:");
         lblPhone.setFont(boldFont);
         headerPanel.add(lblPhone, gbc);
-        gbc.gridx = 1;        
+        gbc.gridx = 1;
         JLabel lblPhoneValue = new JLabel(headerDto.getPhone());
         lblPhoneValue.setFont(normalFont);
         headerPanel.add(lblPhoneValue, gbc);
@@ -168,8 +166,17 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         lblUpdatedDateValue.setFont(normalFont);
         headerPanel.add(lblUpdatedDateValue, gbc);
 
+        gbc.gridx = 4;
+        gbc.gridy = row;
+        JLabel lblStatus = new JLabel("Status:");
+        lblStatus.setFont(boldFont);
+        headerPanel.add(lblStatus, gbc);
+        gbc.gridx = 5;
+        JLabel lblStatusValue = new JLabel(headerDto.getStatusName());
+        lblStatusValue.setFont(normalFont);
+        headerPanel.add(lblStatusValue, gbc);
+
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(backgroundColor);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         String[] columnNames = {
@@ -200,8 +207,6 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         }
 
         JScrollPane scrollPane = new JScrollPane(detailsTable);
-        scrollPane.setBackground(backgroundColor);
-        scrollPane.getViewport().setBackground(backgroundColor);
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Loan Books"),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)
@@ -219,7 +224,19 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         add(mainPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setBackground(backgroundColor);
+
+        // Nút Revoke (hiển thị nếu statusName là "BORROW")
+        if ("BORROW".equals(headerDto.getStatusName())) {
+            btnRevoke = new JButton("Revoke");
+            btnRevoke.setForeground(Color.BLUE);
+            btnRevoke.setFocusPainted(false);
+            btnRevoke.setOpaque(true);
+            btnRevoke.setContentAreaFilled(true);
+            btnRevoke.addActionListener(e -> revokeTransaction(headerDto));
+            buttonPanel.add(btnRevoke);
+        }
+
+        // Nút Cancel
         btnClose = new JButton("Cancel");
         btnClose.setForeground(Color.RED);
         btnClose.setFocusPainted(false);
@@ -227,6 +244,12 @@ public class ViewTransactionLoanDetailModal extends JDialog {
         btnClose.setContentAreaFilled(true);
         btnClose.addActionListener(e -> dispose());
         buttonPanel.add(btnClose);
+
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private Void revokeTransaction(TransactionLoanHeaderDTO headerDto) {
+        JOptionPane.showMessageDialog(this, "Revoke functionality is not implemented yet.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        return null;
     }
 }

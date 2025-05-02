@@ -3,10 +3,13 @@ package com.uit.librarymanagementapplication.service.TransactionLoanServices;
 import com.uit.librarymanagementapplication.domain.DTO.GenreCategory.GenreCategoryDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
+import com.uit.librarymanagementapplication.domain.DbUtils;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDetailRepositories.ITransactionLoanDetailRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDetailRepositories.TransactionLoanDetailRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories.ITransactionLoanHeaderRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories.TransactionLoanHeaderRepository;
+import com.uit.librarymanagementapplication.lib.Constants.TransLoanStatusConsts;
 import com.uit.librarymanagementapplication.service.GenreCategoryServices.GenreCategoryService;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +35,26 @@ public class TransactionLoanService implements ITransactionLoanService {
 
     @Override
     public List<TransactionLoanHeaderDTO> getAllTransLoanHeaderByKeyword(String keyword, String column) {
-        if (keyword == "") {
-            return transactionLoanHeaderRepository.getAllTransHeader();
+        List<TransactionLoanHeaderDTO> transHeaders;
+        if (keyword == null || keyword.trim().isEmpty()) {
+            transHeaders = transactionLoanHeaderRepository.getAllTransHeader();
         } else {
-            return transactionLoanHeaderRepository.getAllTransHeaderByKeyWord(keyword, column);
+            transHeaders = transactionLoanHeaderRepository.getAllTransHeaderByKeyWord(keyword, column);
         }
+
+        for (TransactionLoanHeaderDTO trans : transHeaders) {
+            String statusName;
+            if (trans.getStatus() == TransLoanStatusConsts.BORROW) {
+                statusName = "BORROW";
+            } else if (trans.getStatus() == TransLoanStatusConsts.PAID) {
+                statusName = "PAID";
+            } else {
+                statusName = "UNKNOWN";
+            }
+            trans.setStatusName(statusName);
+        }
+
+        return transHeaders;
     }
 
     @Override
@@ -67,6 +85,31 @@ public class TransactionLoanService implements ITransactionLoanService {
         }
 
         return result;
+    }
+
+    @Override
+    public void createTransactionLoan(TransactionLoanHeaderRequestDTO request) {
+//        try {
+//            DbUtils.beginTransaction();
+//            long headerId = headerRepository.createTransactionLoanHeader(requestDTO);
+//
+//            // Phần 2: Tạo TransactionLoanDetail
+//            detailRepository.createTransactionLoanDetails(headerId, requestDTO.getLoanDetails());
+//
+//            // Phần 3: Cập nhật QtyAllocated
+//            bookRepository.updateQtyAllocated(requestDTO.getLoanDetails());
+//
+//            // Commit giao dịch
+//            DbUtils.commit();
+//        } catch (Exception e) {
+//            // Rollback nếu có lỗi
+//            DbUtils.rollback();
+//            System.err.println("Failed to create transaction loan: " + e.getMessage());
+//        } finally {
+//            // Đóng kết nối
+//            DbUtils.close();
+//            
+//        }
     }
 
 }

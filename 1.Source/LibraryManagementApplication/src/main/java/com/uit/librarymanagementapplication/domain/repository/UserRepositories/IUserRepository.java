@@ -6,13 +6,17 @@ package com.uit.librarymanagementapplication.domain.repository.UserRepositories;
 
 import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.entity.User;
+import java.util.List;
 
 /**
  *
  * @author hieutruong
  */
 public interface IUserRepository {
+    
     UserRoleDTO findByUsername(String username);
     
     boolean createUser(User user);
+    
+    List<UserRoleDTO> getAllUsers();
 }

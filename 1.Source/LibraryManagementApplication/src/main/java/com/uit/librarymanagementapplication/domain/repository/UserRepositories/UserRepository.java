@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -41,7 +43,7 @@ public class UserRepository implements IUserRepository {
                 + "JOIN [dbo].[UserRoles] r ON u.UserRoleID_FK = r.UserRoleID "
                 + "WHERE u.UserName = ? AND u.IsDelete = 0";
         try (
-            Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -102,6 +104,41 @@ public class UserRepository implements IUserRepository {
             DbUtils.close();
         }
         return false;
+    }
+
+    @Override
+    public List<UserRoleDTO> getAllUsers() {
+        List<UserRoleDTO> userList = new ArrayList<>();
+
+        String sql = "SELECT u.*, r.RoleName, r.IsAdmin "
+                + "FROM [dbo].[Users] u "
+                + "JOIN [dbo].[UserRoles] r ON u.UserRoleID_FK = r.UserRoleID "
+                + "WHERE u.IsDelete = 0 AND r.IsAdmin = 0";
+
+        try (
+                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                UserRoleDTO user = new UserRoleDTO(
+                        rs.getInt("UserID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("UserName"),
+                        rs.getString("Password"),
+                        rs.getInt("Gender"),
+                        rs.getString("Email"),
+                        rs.getString("Phone"),
+                        rs.getString("Address"),
+                        rs.getInt("UserRoleID_FK"),
+                        rs.getInt("IsDelete"),
+                        rs.getInt("IsAdmin"),
+                        rs.getString("RoleName")
+                );
+                userList.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userList;
     }
 
 }

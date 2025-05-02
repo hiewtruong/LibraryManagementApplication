@@ -5,6 +5,7 @@
 package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories;
 
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.entity.Author;
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ITransactionLoanHeaderRepository {
     List<TransactionLoanHeaderDTO> getAllTransHeader();
     
     List<TransactionLoanHeaderDTO> getAllTransHeaderByKeyWord(String keyword, String column);
+    
+    int createTransactionLoanHeader(TransactionLoanHeaderRequestDTO requestDTO);
 }

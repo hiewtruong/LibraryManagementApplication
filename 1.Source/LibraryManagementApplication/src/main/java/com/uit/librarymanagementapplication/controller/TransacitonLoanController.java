@@ -4,13 +4,20 @@
  */
 package com.uit.librarymanagementapplication.controller;
 
+import com.uit.librarymanagementapplication.domain.DTO.Book.BookDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
+import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
+import com.uit.librarymanagementapplication.service.BookServices.BookService;
+import com.uit.librarymanagementapplication.service.BookServices.IBookService;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.ITransactionLoanService;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.TransactionLoanService;
+import com.uit.librarymanagementapplication.service.UserServices.IUserService;
+import com.uit.librarymanagementapplication.service.UserServices.UserService;
 import com.uit.librarymanagementapplication.view.admin.author.CreateAuthorModal;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.CreateTransactionLoanPanel;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionLoanPanel;
+import com.uit.librarymanagementapplication.view.admin.transactionLoan.TransactionUserChooseModal;
 import com.uit.librarymanagementapplication.view.admin.transactionLoan.ViewTransactionLoanDetailModal;
 import java.awt.BorderLayout;
 import java.util.List;
@@ -24,6 +31,8 @@ import javax.swing.JPanel;
 public class TransacitonLoanController {
 
     ITransactionLoanService transService = TransactionLoanService.getInstance();
+    IUserService userSerivce = UserService.getInstance();
+    IBookService bookService = BookService.getInstance();
 
     public TransacitonLoanController() {
     }
@@ -43,7 +52,9 @@ public class TransacitonLoanController {
     public void CreateTransactionLoan(JPanel contentPanel, boolean forceReload) {
         if (forceReload || !(contentPanel.getComponentCount() > 0 && contentPanel.getComponent(0) instanceof CreateTransactionLoanPanel)) {
             contentPanel.removeAll();
-            CreateTransactionLoanPanel createTranPanel = new CreateTransactionLoanPanel(contentPanel);
+            List<UserRoleDTO> users = userSerivce.getAllUsers();
+            List<BookDTO> books = bookService.getAllBook();
+            CreateTransactionLoanPanel createTranPanel = new CreateTransactionLoanPanel(contentPanel, users, books);
             contentPanel.setLayout(new BorderLayout());
             contentPanel.add(createTranPanel, BorderLayout.CENTER);
             contentPanel.revalidate();
@@ -54,6 +65,11 @@ public class TransacitonLoanController {
     public void ViewTransactionLoan(JFrame parentFrame, JPanel contentPanel, TransactionLoanHeaderDTO headerDto) {
         List<TransactionLoanDetailDTO> details = transService.getAllTransDetails(headerDto.getLoanHeaderID());
         ViewTransactionLoanDetailModal dialog = new ViewTransactionLoanDetailModal(parentFrame, contentPanel, headerDto, details);
+        dialog.setVisible(true);
+    }
+
+    public void ChooseUserTransactionLoan(JFrame parentFrame, JPanel contentPanel, List<UserRoleDTO> users) {
+        TransactionUserChooseModal dialog = new TransactionUserChooseModal(parentFrame, contentPanel, users);
         dialog.setVisible(true);
     }
 }

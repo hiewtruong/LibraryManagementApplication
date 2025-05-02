@@ -3,7 +3,7 @@ package com.uit.librarymanagementapplication.domain.entity;
 import java.util.Date;
 
 public class TransactionLoanHeader {
-    
+
     private int loanHeaderID;
     private String loanTicketNumber;
     private int userID;
@@ -15,8 +15,12 @@ public class TransactionLoanHeader {
     private Date createdDt;
     private String updateBy;
     private Date updateDt;
+    private int status;
 
-    public TransactionLoanHeader(int loanHeaderID, String loanTicketNumber, int userID, int totalQty, Date loanDt, Date loanReturnDt, int isDelete, String createdBy, Date createdDt, String updateBy, Date updateDt) {
+    public TransactionLoanHeader() {
+    }
+
+    public TransactionLoanHeader(int loanHeaderID, String loanTicketNumber, int userID, int totalQty, Date loanDt, Date loanReturnDt, int isDelete, String createdBy, Date createdDt, String updateBy, Date updateDt, int status) {
         this.loanHeaderID = loanHeaderID;
         this.loanTicketNumber = loanTicketNumber;
         this.userID = userID;
@@ -28,6 +32,7 @@ public class TransactionLoanHeader {
         this.createdDt = createdDt;
         this.updateBy = updateBy;
         this.updateDt = updateDt;
+        this.status = status;
     }
 
     public int getLoanHeaderID() {
@@ -117,6 +122,13 @@ public class TransactionLoanHeader {
     public void setUpdateDt(Date updateDt) {
         this.updateDt = updateDt;
     }
-    
-    
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
 }
