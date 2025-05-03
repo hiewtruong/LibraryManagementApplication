@@ -16,4 +16,6 @@ public interface IUserMapper {
     User toEntity(UserDTO userDTO);
     
     UserDTO toDTO(UserRoleDTO user);
+
+  
 }
