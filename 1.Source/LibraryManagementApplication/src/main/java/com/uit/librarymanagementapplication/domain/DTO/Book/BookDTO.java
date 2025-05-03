@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uit.librarymanagementapplication.domain.DTO.Book;
 
 import java.util.Date;
 
-/**
- *
- * @author hieutruong
- */
 public class BookDTO {
+
     private int bookID;
     private String title;
     private String author;
@@ -24,16 +17,15 @@ public class BookDTO {
     private int isDisplay;
     private int qtyOH;
     private int qtyAllocated;
+    private int isDelete;
     private Date createdDt;
     private String createdBy;
     private Date updateDt;
     private String updateBy;
-    private boolean IsOutOfStock;
 
-    public BookDTO() {
-    }
-
-    public BookDTO(int bookID, String title, String author, String cover, String landingPage, String hashtag, String genreCategory, String publisher, Date publishYear, String location, int isDisplay, int qtyOH, int qtyAllocated, Date createdDt, String createdBy, Date updateDt, String updateBy, boolean IsOutOfStock) {
+    public BookDTO(int bookID, String title, String author, String cover, String landingPage, String hashtag,
+            String genreCategory, String publisher, Date publishYear, String location, int isDisplay,
+            int qtyOH, int qtyAllocated, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
@@ -47,15 +39,14 @@ public class BookDTO {
         this.isDisplay = isDisplay;
         this.qtyOH = qtyOH;
         this.qtyAllocated = qtyAllocated;
+        this.isDelete = isDelete;
         this.createdDt = createdDt;
         this.createdBy = createdBy;
         this.updateDt = updateDt;
         this.updateBy = updateBy;
-        this.IsOutOfStock = IsOutOfStock;
     }
 
-
-
+    // Getters và Setters
     public int getBookID() {
         return bookID;
     }
@@ -160,6 +151,14 @@ public class BookDTO {
         this.qtyAllocated = qtyAllocated;
     }
 
+    public int getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public Date getCreatedDt() {
         return createdDt;
     }
@@ -191,14 +190,4 @@ public class BookDTO {
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
-
-    public boolean isIsOutOfStock() {
-        return IsOutOfStock;
-    }
-
-    public void setIsOutOfStock(boolean IsOutOfStock) {
-        this.IsOutOfStock = IsOutOfStock;
-    }
-    
-    
 }
