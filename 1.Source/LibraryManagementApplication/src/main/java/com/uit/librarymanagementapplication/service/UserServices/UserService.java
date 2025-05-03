@@ -10,13 +10,11 @@ import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants.*;
 import com.uit.librarymanagementapplication.lib.Constants.GeneralStatus;
 import com.uit.librarymanagementapplication.mapper.IUserMapper;
-import java.util.ArrayList;
-import java.util.List;
 
-public class UserService implements IUserService  {
+public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
-
+    private final IUserMapper userMapper = IUserMapper.INSTANCE;
     private static UserService instance;
 
     public UserService() {
@@ -34,12 +32,12 @@ public class UserService implements IUserService  {
     public UserDTO login(String username, String password, boolean isAdmin) {
         UserDTO userDTO = null;
         UserRoleDTO user = userRepository.findByUsername(username);
-     
+
         if (user == null) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
         }
         userDTO = IUserMapper.INSTANCE.toDTO(user);
-       
+
         if (isAdmin && userDTO.getIsAdmin() == 0) {
             throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_IS_NOT_ADMIN, ErrorMessage.USER_IS_NOT_ADMIN);
         }
@@ -63,7 +61,18 @@ public class UserService implements IUserService  {
     }
 
     @Override
-    public List<UserRoleDTO> getAllUsers() {
-       return userRepository.getAllUsers();
+    public UserDTO loginUser(String username, String password) {
+        UserDTO user = userRepository.findUserByUsernameAndPassword(username);
+        if (user == null) {
+            throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
+        }
+        boolean isValid = ComparePassword(password, user.getPassword());
+        if (!isValid) {
+            throw new ApiException(ErrorTitle.LOGIN, ErrorCode.PASSWORD_NOT_CORRECT, ErrorMessage.PASSWORD_NOT_CORRECT);
+        }
+        if (user.getIsDelete() == GeneralStatus.DELETE) {
+            throw new ApiException(ErrorTitle.LOGIN, ErrorCode.USER_HAS_BEEN_LOCKED, ErrorMessage.USER_HAS_BEEN_LOCKED);
+        }
+        return user;
     }
 }
