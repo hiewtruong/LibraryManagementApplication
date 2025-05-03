@@ -5,7 +5,7 @@ import java.util.Date;
 public class TransactionLoanDetail {
 
     private int loanDetailID;
-    private int loadBookID;
+    private int loanBookID;
     private int isDelete;
     private String createdBy;
     private Date createdDt;
@@ -13,9 +13,9 @@ public class TransactionLoanDetail {
     private Date updateDt;
     private int loanHeaderID;
 
-    public TransactionLoanDetail(int loanDetailID, int loadBookID, int isDelete, String createdBy, Date createdDt, String updateBy, Date updateDt, int loanHeaderID) {
+    public TransactionLoanDetail(int loanDetailID, int loanBookID, int isDelete, String createdBy, Date createdDt, String updateBy, Date updateDt, int loanHeaderID) {
         this.loanDetailID = loanDetailID;
-        this.loadBookID = loadBookID;
+        this.loanBookID = loanBookID;
         this.isDelete = isDelete;
         this.createdBy = createdBy;
         this.createdDt = createdDt;
@@ -40,12 +40,12 @@ public class TransactionLoanDetail {
         this.loanDetailID = loanDetailID;
     }
 
-    public int getLoadBookID() {
-        return loadBookID;
+    public int getLoanBookID() {
+        return loanBookID;
     }
 
-    public void setLoadBookID(int loadBookID) {
-        this.loadBookID = loadBookID;
+    public void setLoanBookID(int loanBookID) {
+        this.loanBookID = loanBookID;
     }
 
     public int getIsDelete() {

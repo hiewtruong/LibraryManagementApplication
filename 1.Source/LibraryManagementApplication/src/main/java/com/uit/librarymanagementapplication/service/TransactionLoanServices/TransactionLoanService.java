@@ -4,7 +4,10 @@ import com.uit.librarymanagementapplication.domain.DTO.GenreCategory.GenreCatego
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRevokeDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
+import com.uit.librarymanagementapplication.domain.repository.BookRepositories.BookRepository;
+import com.uit.librarymanagementapplication.domain.repository.BookRepositories.IBookRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDetailRepositories.ITransactionLoanDetailRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDetailRepositories.TransactionLoanDetailRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories.ITransactionLoanHeaderRepository;
@@ -18,12 +21,14 @@ public class TransactionLoanService implements ITransactionLoanService {
 
     private final ITransactionLoanHeaderRepository transactionLoanHeaderRepository;
     private final ITransactionLoanDetailRepository transactionLoanDetailRepository;
+    private final IBookRepository bookRepository;
     private static TransactionLoanService instance;
     private static GenreCategoryService categoryService = new GenreCategoryService();
 
     public TransactionLoanService() {
         this.transactionLoanHeaderRepository = TransactionLoanHeaderRepository.getInstance();
         this.transactionLoanDetailRepository = TransactionLoanDetailRepository.getInstance();
+        this.bookRepository = BookRepository.getInstance();
     }
 
     public static TransactionLoanService getInstance() {
@@ -89,27 +94,34 @@ public class TransactionLoanService implements ITransactionLoanService {
 
     @Override
     public void createTransactionLoan(TransactionLoanHeaderRequestDTO request) {
-//        try {
-//            DbUtils.beginTransaction();
-//            long headerId = headerRepository.createTransactionLoanHeader(requestDTO);
-//
-//            // Phần 2: Tạo TransactionLoanDetail
-//            detailRepository.createTransactionLoanDetails(headerId, requestDTO.getLoanDetails());
-//
-//            // Phần 3: Cập nhật QtyAllocated
-//            bookRepository.updateQtyAllocated(requestDTO.getLoanDetails());
-//
-//            // Commit giao dịch
-//            DbUtils.commit();
-//        } catch (Exception e) {
-//            // Rollback nếu có lỗi
-//            DbUtils.rollback();
-//            System.err.println("Failed to create transaction loan: " + e.getMessage());
-//        } finally {
-//            // Đóng kết nối
-//            DbUtils.close();
-//            
-//        }
+        try {
+            DbUtils.beginTransaction();
+            int headerId = transactionLoanHeaderRepository.createTransactionLoanHeader(request);
+            transactionLoanDetailRepository.createTransactionLoanDetails(headerId, request.getLoanDetails());
+            bookRepository.updateQtyAllocated(request.getLoanDetails());
+            DbUtils.commit();
+        } catch (Exception e) {
+            DbUtils.rollback();
+            System.err.println("Failed to create transaction loan: " + e.getMessage());
+        } finally {
+            DbUtils.close();
+
+        }
+    }
+
+    @Override
+    public void revokeTransactionLoan(TransactionLoanHeaderRevokeDTO request) {
+        try {
+            DbUtils.beginTransaction();
+            transactionLoanHeaderRepository.updateStatusRevoke(request.getLoanHeaderID());
+            bookRepository.decrementQtyAllocated(request.getLoanDetails());
+            DbUtils.commit();
+        } catch (Exception e) {
+            DbUtils.rollback();
+            System.err.println("Failed to revoke transaction loan: " + e.getMessage());
+        } finally {
+            DbUtils.close();
+        }
     }
 
 }

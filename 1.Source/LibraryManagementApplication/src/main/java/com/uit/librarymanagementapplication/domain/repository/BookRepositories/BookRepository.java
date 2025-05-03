@@ -4,11 +4,13 @@
  */
 package com.uit.librarymanagementapplication.domain.repository.BookRepositories;
 
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailRequestDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
 import com.uit.librarymanagementapplication.domain.entity.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +70,50 @@ public class BookRepository implements IBookRepository {
         }
 
         return books;
+    }
+
+    @Override
+    public void updateQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails) {
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "UPDATE Books SET QtyAllocated = QtyAllocated + 1 WHERE BookID = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                for (TransactionLoanDetailRequestDTO detail : loanDetails) {
+                    stmt.setLong(1, detail.getLoadBookID());
+                    stmt.addBatch();
+                }
+                int[] rowsAffected = stmt.executeBatch();
+                for (int rows : rowsAffected) {
+                    if (rows == 0) {
+                        throw new SQLException("Updating QtyAllocated failed, no rows affected.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating QtyAllocated: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void decrementQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails) {
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "UPDATE Books SET QtyAllocated = QtyAllocated - 1 WHERE BookID = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                for (TransactionLoanDetailRequestDTO detail : loanDetails) {
+                    stmt.setLong(1, detail.getLoadBookID());
+                    stmt.addBatch();
+                }
+                int[] rowsAffected = stmt.executeBatch();
+                for (int rows : rowsAffected) {
+                    if (rows == 0) {
+                        throw new SQLException("Decrementing QtyAllocated failed, no rows affected.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error decrementing QtyAllocated: " + e.getMessage(), e);
+        }
     }
 
 }

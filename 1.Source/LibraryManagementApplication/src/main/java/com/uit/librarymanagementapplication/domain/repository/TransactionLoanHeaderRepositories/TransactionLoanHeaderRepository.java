@@ -3,11 +3,14 @@ package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHe
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
+import com.uit.librarymanagementapplication.lib.Constants.TransLoanStatusConsts;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TransactionLoanHeaderRepository implements ITransactionLoanHeaderRepository {
@@ -129,35 +132,60 @@ public class TransactionLoanHeaderRepository implements ITransactionLoanHeaderRe
 
     @Override
     public int createTransactionLoanHeader(TransactionLoanHeaderRequestDTO requestDTO) {
-//        Connection conn = DbUtils.getConnection;
-//        
-//        String sql = "INSERT INTO TransactionLoanHeader (userID, loanReturnDt, totalQty, loanDt, status, createdDt, createdBy) "
-//                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-//        try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-//            stmt.setLong(1, requestDTO.getUserID());
-//            stmt.setDate(2, new java.sql.Date(requestDTO.getLoanReturnDt().getTime()));
-//            stmt.setInt(3, requestDTO.getTotalQty());
-//            stmt.setDate(4, new java.sql.Date(new Date().getTime())); // loanDt là ngày hiện tại
-//            stmt.setString(5, "BORROW"); // Giả định trạng thái ban đầu là "BORROW"
-//            stmt.setDate(6, new java.sql.Date(new Date().getTime())); // createdDt là ngày hiện tại
-//            stmt.setString(7, "SYSTEM"); // createdBy tạm để là "SYSTEM"
-//
-//            int rowsAffected = stmt.executeUpdate();
-//            if (rowsAffected == 0) {
-//                throw new SQLException("Creating TransactionLoanHeader failed, no rows affected.");
-//            }
-//
-//            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-//                if (generatedKeys.next()) {
-//                    return generatedKeys.getInt(1);
-//                } else {
-//                    throw new SQLException("Creating TransactionLoanHeader failed, no ID obtained.");
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error retrieving transaction loan headers: " + e.getMessage(), e);
-//        }
-        return 0;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyy-HH:mm:ss");
+        String loanTicketNumber = "LMS-" + dateFormat.format(new Date());
+        String sql = "INSERT INTO dbo.TransactionLoanHeaders (LoanTicketNumber, UserID_FK, TotalQTy, LoanDt, LoanReturnDt, IsDelete, CreatedBy, CreatedDt, UpdateBy, UpdateDt, Status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+
+        try {
+            Connection conn = DbUtils.getConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, loanTicketNumber);
+                stmt.setLong(2, requestDTO.getUserID());
+                stmt.setInt(3, requestDTO.getTotalQty());
+                stmt.setDate(4, new java.sql.Date(new Date().getTime()));
+                stmt.setDate(5, new java.sql.Date(requestDTO.getLoanReturnDt().getTime()));
+                stmt.setInt(6, 0);
+                stmt.setString(7, "admin@uit.com");
+                stmt.setTimestamp(8, new java.sql.Timestamp(new Date().getTime()));
+                stmt.setString(9, "admin@uit.com");
+                stmt.setTimestamp(10, new java.sql.Timestamp(new Date().getTime()));
+                stmt.setInt(11, 0);
+
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("Creating TransactionLoanHeader failed, no rows affected.");
+                }
+
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    } else {
+                        throw new SQLException("Creating TransactionLoanHeader failed, no ID obtained.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating transaction loan header: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void updateStatusRevoke(int loanHeaderID) {
+        String sql = "UPDATE dbo.TransactionLoanHeaders SET Status = 1 WHERE LoanHeaderID = ?";
+        try {
+            Connection conn = DbUtils.getConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, loanHeaderID);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("No rows updated for LoanHeaderID: " + loanHeaderID);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating IsDelete: " + e.getMessage(), e);
+        }
+
     }
 
 }

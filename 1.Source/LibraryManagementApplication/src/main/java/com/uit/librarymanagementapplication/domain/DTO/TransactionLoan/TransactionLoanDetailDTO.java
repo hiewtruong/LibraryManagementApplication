@@ -14,7 +14,7 @@ public class TransactionLoanDetailDTO {
     
     private int loanDetailID;
     private int loanHeaderID;
-    private int loadBookID;
+    private int loanBookID;
     private String createdBy;
     private Date createdDt;
     private String updateBy;
@@ -30,10 +30,10 @@ public class TransactionLoanDetailDTO {
     }
 
     
-    public TransactionLoanDetailDTO(int loanDetailID, int loanHeaderID, int loadBookID, String createdBy, Date createdDt, String updateBy, Date updateDt, int bookID, String title, String author, String genreCategory, String publisher, Date publishYear) {
+    public TransactionLoanDetailDTO(int loanDetailID, int loanHeaderID, int loanBookID, String createdBy, Date createdDt, String updateBy, Date updateDt, int bookID, String title, String author, String genreCategory, String publisher, Date publishYear) {
         this.loanDetailID = loanDetailID;
         this.loanHeaderID = loanHeaderID;
-        this.loadBookID = loadBookID;
+        this.loanBookID = loanBookID;
         this.createdBy = createdBy;
         this.createdDt = createdDt;
         this.updateBy = updateBy;
@@ -62,12 +62,12 @@ public class TransactionLoanDetailDTO {
         this.loanHeaderID = loanHeaderID;
     }
 
-    public int getLoadBookID() {
-        return loadBookID;
+    public int getLoanBookID() {
+        return loanBookID;
     }
 
-    public void setLoadBookID(int loadBookID) {
-        this.loadBookID = loadBookID;
+    public void setLoanBookID(int loanBookID) {
+        this.loanBookID = loanBookID;
     }
 
     public String getCreatedBy() {

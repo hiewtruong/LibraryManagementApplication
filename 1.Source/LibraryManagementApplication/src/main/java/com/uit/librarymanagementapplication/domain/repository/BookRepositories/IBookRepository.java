@@ -4,6 +4,7 @@
  */
 package com.uit.librarymanagementapplication.domain.repository.BookRepositories;
 
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailRequestDTO;
 import com.uit.librarymanagementapplication.domain.entity.Book;
 import java.util.List;
 
@@ -13,4 +14,8 @@ import java.util.List;
  */
 public interface IBookRepository {
      List<Book> getAllBooks();
+     
+     void updateQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails);
+     
+     void decrementQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails);
 }

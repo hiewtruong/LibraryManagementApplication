@@ -20,4 +20,6 @@ public interface ITransactionLoanHeaderRepository {
     List<TransactionLoanHeaderDTO> getAllTransHeaderByKeyWord(String keyword, String column);
     
     int createTransactionLoanHeader(TransactionLoanHeaderRequestDTO requestDTO);
+    
+    void updateStatusRevoke(int loanHeaderID);
 }
