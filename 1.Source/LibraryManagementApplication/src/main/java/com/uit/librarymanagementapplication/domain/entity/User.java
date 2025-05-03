@@ -3,7 +3,7 @@ package com.uit.librarymanagementapplication.domain.entity;
 import java.util.Date;
 
 public class User {
-    
+
     private int userID;
     private String firstName;
     private String lastName;
@@ -37,8 +37,8 @@ public class User {
         this.updateDt = updateDt;
         this.updateBy = updateBy;
     }
-    
-    
+
+  
 
     public int getUserID() {
         return userID;
