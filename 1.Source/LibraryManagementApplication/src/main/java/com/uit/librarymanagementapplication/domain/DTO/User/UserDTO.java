@@ -5,7 +5,7 @@ package com.uit.librarymanagementapplication.domain.DTO.User;
  * @author hieutruong
  */
 public class UserDTO {
-
+    private int userId;
     private String firstName;
     private String lastName;
     private String userName;
@@ -17,6 +17,7 @@ public class UserDTO {
     private int isAdmin;
     private String roleName;
 
+  
     public String getFirstName() {
         return firstName;
     }
@@ -24,7 +25,13 @@ public class UserDTO {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+public int getUserId() {
+        return userId;
+    }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     public String getLastName() {
         return lastName;
     }
@@ -96,8 +103,8 @@ public class UserDTO {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
-
-    public UserDTO(String firstName, String lastName, String userName, String password, String email, String phone, String address, int isDelete, int isAdmin, String roleName) {
+    public UserDTO(int userID,String firstName, String lastName, String userName, String password, String email, String phone, String address, int isDelete, int isAdmin, String roleName) {
+        this.userId = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
