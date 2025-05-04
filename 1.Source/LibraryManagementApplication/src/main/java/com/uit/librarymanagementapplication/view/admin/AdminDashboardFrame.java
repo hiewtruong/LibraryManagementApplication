@@ -2,6 +2,7 @@ package com.uit.librarymanagementapplication.view.admin;
 
 import com.uit.librarymanagementapplication.controller.AuthorController;
 import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
+import com.uit.librarymanagementapplication.controller.UserController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
@@ -20,6 +21,7 @@ public class AdminDashboardFrame extends JFrame {
     private JPanel contentPanel;
     private AuthorController authorController;
     private TransacitonLoanController transacitonLoanController;
+    private UserController userController;
 
     public AdminDashboardFrame(UserDTO user) {
         setTitle("Admin Dashboard");
@@ -95,6 +97,7 @@ public class AdminDashboardFrame extends JFrame {
 
         this.authorController = new AuthorController();
         this.transacitonLoanController = new TransacitonLoanController();
+        this.userController = new UserController();
 
         bookBtn.addActionListener(e -> setContent(new BookPanel()));
         authorBtn.addActionListener(e -> {
@@ -107,7 +110,10 @@ public class AdminDashboardFrame extends JFrame {
         crtTransactionLoanBtn.addActionListener(e -> {
             transacitonLoanController.CreateTransactionLoan(contentPanel, false);
         });
-        userBtnUser.addActionListener(e -> setContent(new UserPanel()));
+
+        userBtnUser.addActionListener(e -> {
+            userController.Init(contentPanel, false);
+        });
         exitBtn.addActionListener(e -> handleExit());
 
         setVisible(true);

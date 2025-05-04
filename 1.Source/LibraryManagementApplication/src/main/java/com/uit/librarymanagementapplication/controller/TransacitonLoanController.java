@@ -32,7 +32,7 @@ public class TransacitonLoanController {
 
     ITransactionLoanService transService = TransactionLoanService.getInstance();
     IUserService userSerivce = UserService.getInstance();
-    IBookService bookService = BookService.getInstance();
+    //IBookService bookService = BookService.getInstance();
 
     public TransacitonLoanController() {
     }
@@ -51,14 +51,14 @@ public class TransacitonLoanController {
 
     public void CreateTransactionLoan(JPanel contentPanel, boolean forceReload) {
         if (forceReload || !(contentPanel.getComponentCount() > 0 && contentPanel.getComponent(0) instanceof CreateTransactionLoanPanel)) {
-            contentPanel.removeAll();
-            List<UserRoleDTO> users = userSerivce.getAllUsers();
-            List<BookDTO> books = bookService.getAllBook();
-            CreateTransactionLoanPanel createTranPanel = new CreateTransactionLoanPanel(contentPanel, users, books);
-            contentPanel.setLayout(new BorderLayout());
-            contentPanel.add(createTranPanel, BorderLayout.CENTER);
-            contentPanel.revalidate();
-            contentPanel.repaint();
+//            contentPanel.removeAll();
+//            List<UserRoleDTO> users = userSerivce.getAllUsers();
+//            List<BookDTO> books = bookService.getAllBook();
+//            CreateTransactionLoanPanel createTranPanel = new CreateTransactionLoanPanel(contentPanel, users, books);
+//            contentPanel.setLayout(new BorderLayout());
+//            contentPanel.add(createTranPanel, BorderLayout.CENTER);
+//            contentPanel.revalidate();
+//            contentPanel.repaint();
         }
     }
 

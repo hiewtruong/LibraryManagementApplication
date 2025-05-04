@@ -20,6 +20,11 @@ public class User {
     private Date updateDt;
     private String updateBy;
 
+    public User() {
+    }
+
+    
+    
     public User(int userID, String firstName, String lastName, String userName, String password, int gender, String email, String phone, String address, int userRoleID, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
         this.userID = userID;
         this.firstName = firstName;

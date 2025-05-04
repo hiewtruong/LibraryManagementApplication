@@ -4,6 +4,8 @@ public class Constants {
 
     public static final String ALGORITHM = "AES";
     public static final String ADMIN = "admin@uit.com";
+    public static final int ADMIN_ROLE = 1;
+    public static final int USER_ROLE = 2;
 
     public class ErrorCode {
 
@@ -42,6 +44,7 @@ public class Constants {
         public static final String CONFIRM_TITLE = "Confirm";
         public static final String CONFIRM_CONTENT = "Are you want to save?";
         public static final String CONFIRM_EXIT_CONTENT = "Are you want to exit?";
+        public static final String CONFIRM_DELETE_CONTENT = "Are you want to delete?";
     }
 
     public class TransLoanStatusConsts {

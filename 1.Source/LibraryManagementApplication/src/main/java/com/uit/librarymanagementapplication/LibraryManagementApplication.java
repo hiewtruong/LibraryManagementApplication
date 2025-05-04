@@ -6,6 +6,7 @@ import com.uit.librarymanagementapplication.domain.repository.UserRepositories.U
 import com.uit.librarymanagementapplication.service.UserServices.UserService;
 import com.uit.librarymanagementapplication.view.admin.AdminDashboardFrame;
 import com.uit.librarymanagementapplication.view.admin.AdminLoginFrame;
+import com.uit.librarymanagementapplication.view.user.BookListForm;
 import com.uit.librarymanagementapplication.view.user.UserLoginFrame;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class LibraryManagementApplication {
             if (finalMode == 1) {
                 new AdminLoginFrame();
             } else {
-                new UserLoginFrame();
+                new BookListForm();
             }
         });
     }

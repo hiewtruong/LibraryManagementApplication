@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface IBookRepository {
     List<Book> findAllBooks();
-     List<Book> findByTitile(String title);
+    List<Book> findByTitile(String title);
     Book findBookById(int bookID);
     boolean createBook(Book book);
     boolean updateBook(Book book);

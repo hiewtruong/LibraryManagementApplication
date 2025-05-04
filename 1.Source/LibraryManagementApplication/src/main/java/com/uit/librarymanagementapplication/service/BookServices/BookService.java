@@ -12,29 +12,30 @@ import com.uit.librarymanagementapplication.mapper.IBookMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+public class BookService implements IBookService {
 
-public class BookService implements iBookService{
-  private final BookRepository bookRepository = new BookRepository();
+    private final BookRepository bookRepository = new BookRepository();
+
     @Override
     public List<BookDTO> getAllBook() {
-          List<Book> books = bookRepository.findAllBooks();
+        List<Book> books = bookRepository.findAllBooks();
         return books.stream()
                 .map(IBookMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
-      public boolean updateBookQuantity(BookDTO book) {
+
+    public boolean updateBookQuantity(BookDTO book) {
         if (book.getQtyOH() > 0) {
-           
+
             book.setQtyOH(book.getQtyOH() - 1);
             book.setQtyAllocated(book.getQtyAllocated() + 1);
-
-           
             bookRepository.updateBookQuantity(book.getBookID(), book.getQtyOH(), book.getQtyAllocated());
             return true;
         } else {
-       
+
             return false;
         }
     }
+
     
 }

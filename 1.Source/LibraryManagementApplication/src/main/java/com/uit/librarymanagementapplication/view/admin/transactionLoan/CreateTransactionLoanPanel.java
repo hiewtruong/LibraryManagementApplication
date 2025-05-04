@@ -192,20 +192,20 @@ public class CreateTransactionLoanPanel extends JPanel {
         availableBooksTable.setShowGrid(true);
         availableBooksTable.setGridColor(Color.LIGHT_GRAY);
 
-        availableBooksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                int bookId = (int) table.getModel().getValueAt(row, 0);
-                BookDTO book = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
-                if (book != null && book.isIsOutOfStock()) {
-                    c.setForeground(Color.RED);
-                } else {
-                    c.setForeground(Color.BLACK);
-                }
-                return c;
-            }
-        });
+        //availableBooksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            //@Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//                int bookId = (int) table.getModel().getValueAt(row, 0);
+//                BookDTO book = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
+//                if (book != null && book.isIsOutOfStock()) {
+//                    c.setForeground(Color.RED);
+//                } else {
+//                    c.setForeground(Color.BLACK);
+//                }
+//                return c;
+//            }
+        //});
 
         TableColumn bookIdColumn = availableBooksTable.getColumnModel().getColumn(0);
         availableBooksTable.getColumnModel().removeColumn(bookIdColumn);
@@ -480,10 +480,10 @@ public class CreateTransactionLoanPanel extends JPanel {
             int bookId = (int) availableBooksModel.getValueAt(selectedRow, 0);
             BookDTO selectedBook = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
 
-            if (selectedBook != null && selectedBook.isIsOutOfStock()) {
-                JOptionPane.showMessageDialog(this, "This book is out of stock and cannot be selected!", "Warning", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+//            if (selectedBook != null && selectedBook.isIsOutOfStock()) {
+//                JOptionPane.showMessageDialog(this, "This book is out of stock and cannot be selected!", "Warning", JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
 
             Object[] rowData = new Object[availableBooksModel.getColumnCount()];
             for (int i = 0; i < rowData.length; i++) {

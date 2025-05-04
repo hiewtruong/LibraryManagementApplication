@@ -21,14 +21,14 @@ public class TransactionLoanService implements ITransactionLoanService {
 
     private final ITransactionLoanHeaderRepository transactionLoanHeaderRepository;
     private final ITransactionLoanDetailRepository transactionLoanDetailRepository;
-    private final IBookRepository bookRepository;
+    //private final IBookRepository bookRepository;
     private static TransactionLoanService instance;
     private static GenreCategoryService categoryService = new GenreCategoryService();
 
     public TransactionLoanService() {
         this.transactionLoanHeaderRepository = TransactionLoanHeaderRepository.getInstance();
         this.transactionLoanDetailRepository = TransactionLoanDetailRepository.getInstance();
-        this.bookRepository = BookRepository.getInstance();
+        //this.bookRepository = BookRepository.getInstance();
     }
 
     public static TransactionLoanService getInstance() {
@@ -98,7 +98,7 @@ public class TransactionLoanService implements ITransactionLoanService {
             DbUtils.beginTransaction();
             int headerId = transactionLoanHeaderRepository.createTransactionLoanHeader(request);
             transactionLoanDetailRepository.createTransactionLoanDetails(headerId, request.getLoanDetails());
-            bookRepository.updateQtyAllocated(request.getLoanDetails());
+            //bookRepository.updateQtyAllocated(request.getLoanDetails());
             DbUtils.commit();
         } catch (Exception e) {
             DbUtils.rollback();
@@ -114,7 +114,7 @@ public class TransactionLoanService implements ITransactionLoanService {
         try {
             DbUtils.beginTransaction();
             transactionLoanHeaderRepository.updateStatusRevoke(request.getLoanHeaderID());
-            bookRepository.decrementQtyAllocated(request.getLoanDetails());
+            //bookRepository.decrementQtyAllocated(request.getLoanDetails());
             DbUtils.commit();
         } catch (Exception e) {
             DbUtils.rollback();

@@ -25,6 +25,11 @@ public class UserRoleDTO {
     private int isAdmin;
     private String roleName;
 
+    public UserRoleDTO() {
+    }
+
+    
+    
     public int getUserID() {
         return userID;
     }
