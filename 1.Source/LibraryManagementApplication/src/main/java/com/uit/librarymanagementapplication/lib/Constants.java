@@ -32,7 +32,7 @@ public class Constants {
         public static final String CREATE_USER_FAILD = "Create user failed";
         public static final String UPDATE_USER_FAILD = "Update user failed";
         public static final String DELETE_USER_FAILD = "Delete user failed";
-             public static final String CREATE_TRANS_FAILED = "Failed to create transaction loans";
+        public static final String CREATE_TRANS_FAILED = "Failed to create transaction loans";
         public static final String REVOKE_TRANS_FAILED = "Failed to revoke transaction loans";
     }
 
@@ -92,6 +92,10 @@ public class Constants {
 
         public static final int BORROW = 0;
         public static final int PAID = 1;
+    }
+
+    public class EmailConstants {
+        public static final String EMAIL_SUBJECT_ACCOUNT_CREATED = "Your Account Has Been Successfully Created";
     }
 
 }

@@ -3,6 +3,7 @@ package com.uit.librarymanagementapplication.controller;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
 import com.uit.librarymanagementapplication.lib.ApiException;
+import static com.uit.librarymanagementapplication.lib.EmailHelper.sendEmail;
 import com.uit.librarymanagementapplication.service.UserServices.IUserService;
 import com.uit.librarymanagementapplication.service.UserServices.UserService;
 import com.uit.librarymanagementapplication.view.admin.AdminDashboardFrame;
@@ -12,6 +13,7 @@ import com.uit.librarymanagementapplication.view.lib.CommonUI;
 import com.uit.librarymanagementapplication.view.user.BookListForm;
 import java.awt.BorderLayout;
 import java.util.List;
+import javax.mail.MessagingException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 

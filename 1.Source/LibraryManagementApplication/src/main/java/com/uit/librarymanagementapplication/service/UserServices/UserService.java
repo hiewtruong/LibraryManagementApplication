@@ -8,10 +8,12 @@ import com.uit.librarymanagementapplication.domain.repository.UserRepositories.I
 import com.uit.librarymanagementapplication.domain.repository.UserRepositories.UserRepository;
 import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants;
+import com.uit.librarymanagementapplication.lib.Constants.EmailConstants;
 import com.uit.librarymanagementapplication.lib.Constants.ErrorCode;
 import com.uit.librarymanagementapplication.lib.Constants.ErrorMessage;
 import com.uit.librarymanagementapplication.lib.Constants.ErrorTitle;
 import com.uit.librarymanagementapplication.lib.Constants.GeneralStatus;
+import com.uit.librarymanagementapplication.lib.EmailHelper;
 import com.uit.librarymanagementapplication.mapper.IUserMapper;
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,6 +121,8 @@ public class UserService implements IUserService {
             if (!create) {
                 throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.CREATE_USER_FAILD, Constants.ErrorMessage.CREATE_USER_FAILD);
             }
+            String body = EmailHelper.generateAccountEmailContent(user.getUserName(), user.getPassword());
+            EmailHelper.sendEmail(user.getEmail(), EmailConstants.EMAIL_SUBJECT_ACCOUNT_CREATED, body);
         } catch (ApiException e) {
             throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.CREATE_USER_FAILD, Constants.ErrorMessage.CREATE_USER_FAILD);
         }
