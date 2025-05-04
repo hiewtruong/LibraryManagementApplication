@@ -1,7 +1,6 @@
 package com.uit.librarymanagementapplication.view.admin;
 
 import com.uit.librarymanagementapplication.controller.UserController;
-import com.uit.librarymanagementapplication.lib.ApiException;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -11,6 +10,7 @@ public class AdminLoginFrame extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private UserController controller;
+    private JCheckBox showPasswordCheckBox;
 
     public AdminLoginFrame() {
         controller = new UserController();
@@ -46,12 +46,40 @@ public class AdminLoginFrame extends JFrame {
         titleLabel.setForeground(Color.BLACK);
 
         usernameField = new JTextField();
-        usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        usernameField.setPreferredSize(new Dimension(400, 40));
+        usernameField.setMaximumSize(new Dimension(400, 40));
         usernameField.setBorder(BorderFactory.createTitledBorder("Username"));
 
+        JPanel passwordPanel = new JPanel(new GridBagLayout());
+        passwordPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 0, 0, 5);
+
         passwordField = new JPasswordField();
-        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        passwordField.setPreferredSize(new Dimension(300, 40));
+        passwordField.setMaximumSize(new Dimension(300, 40));
         passwordField.setBorder(BorderFactory.createTitledBorder("Password"));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        passwordPanel.add(passwordField, gbc);
+
+        showPasswordCheckBox = new JCheckBox("Show Password");
+        showPasswordCheckBox.setOpaque(false);
+        showPasswordCheckBox.addActionListener(e -> {
+            if (showPasswordCheckBox.isSelected()) {
+                passwordField.setEchoChar((char) 0);
+            } else {
+                passwordField.setEchoChar('\u2022');
+            }
+        });
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        passwordPanel.add(showPasswordCheckBox, gbc);
 
         JButton loginButton = new JButton("Login");
         loginButton.setBackground(new Color(0, 102, 255));
@@ -62,15 +90,16 @@ public class AdminLoginFrame extends JFrame {
         loginButton.setContentAreaFilled(true);
         loginButton.setOpaque(true);
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        loginButton.setPreferredSize(new Dimension(400, 40));
+        loginButton.setMaximumSize(new Dimension(400, 40));
         loginButton.addActionListener(e -> handleLogin());
 
         loginPanel.add(titleLabel);
         loginPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         loginPanel.add(usernameField);
+        loginPanel.add(Box.createRigidArea(new Dimension(0, 1)));
+        loginPanel.add(passwordPanel);
         loginPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-        loginPanel.add(passwordField);
-        loginPanel.add(Box.createRigidArea(new Dimension(0, 25)));
         loginPanel.add(loginButton);
 
         splitPane.setRightComponent(loginPanel);
