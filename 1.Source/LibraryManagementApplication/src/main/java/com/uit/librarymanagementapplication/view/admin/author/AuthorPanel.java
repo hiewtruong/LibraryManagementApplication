@@ -87,7 +87,6 @@ public class AuthorPanel extends JPanel {
 
     private void loadAuthorData(List<AuthorDTO> authors) {
         tableModel.setRowCount(0);
-
         for (AuthorDTO author : authors) {
             Object[] row = {
                 author.getAuthorName(),

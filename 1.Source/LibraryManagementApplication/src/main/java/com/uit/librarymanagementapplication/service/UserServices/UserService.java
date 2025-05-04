@@ -95,8 +95,6 @@ public class UserService implements IUserService {
         } else {
             users = userRepository.getAllUsersCustomerBySearch(keyword, column);
         }
-
-        // Giải mã mật khẩu cho từng user
         for (UserRoleDTO user : users) {
             String encryptedPassword = user.getPassword();
             if (encryptedPassword != null) {
@@ -104,41 +102,48 @@ public class UserService implements IUserService {
                 user.setPassword(decryptedPassword);
             }
         }
-
         return users;
     }
 
     @Override
     public void createUser(UserRoleDTO user) {
-        String password = UtilService.encrypt(user.getPassword());
-        User newUser = IUserMapper.INSTANCE.toEntity(user);
-        newUser.setUserRoleID(Constants.USER_ROLE);
-        newUser.setIsDelete(GeneralStatus.OPEN);
-        newUser.setCreatedBy(Constants.ADMIN);
-        newUser.setUpdateBy(Constants.ADMIN);
-        newUser.setPassword(password);
-        boolean create = userRepository.createUser(newUser);
-        if (!create) {
-            throw new RuntimeException("Failed to update user with ID: ");
+        try {
+            String password = UtilService.encrypt(user.getPassword());
+            User newUser = IUserMapper.INSTANCE.toEntity(user);
+            newUser.setUserRoleID(Constants.USER_ROLE);
+            newUser.setIsDelete(GeneralStatus.OPEN);
+            newUser.setCreatedBy(Constants.ADMIN);
+            newUser.setUpdateBy(Constants.ADMIN);
+            newUser.setPassword(password);
+            boolean create = userRepository.createUser(newUser);
+            if (!create) {
+                throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.CREATE_USER_FAILD, Constants.ErrorMessage.CREATE_USER_FAILD);
+            }
+        } catch (ApiException e) {
+            throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.CREATE_USER_FAILD, Constants.ErrorMessage.CREATE_USER_FAILD);
         }
     }
 
     @Override
     public void updateUser(UserRoleDTO userRequest) {
-        User existingUser = userRepository.getUser(userRequest.getUserID());
-        if (existingUser == null) {
-            throw new RuntimeException("User not found with ID: " + userRequest.getUserID());
-        }
-        User updatedUser = IUserMapper.INSTANCE.toEntity(userRequest);
-        String password = UtilService.encrypt(userRequest.getPassword());
-        userRequest.setPassword(password);
-        updatedUser.setUserID(existingUser.getUserID());
-        updatedUser.setUpdateDt(new Date());
-        updatedUser.setUpdateBy(Constants.ADMIN);
 
-        boolean updated = userRepository.updateUser(updatedUser);
-        if (!updated) {
-            throw new RuntimeException("Failed to update user with ID: " + userRequest.getUserID());
+        try {
+            User existingUser = userRepository.getUser(userRequest.getUserID());
+            if (existingUser == null) {
+                throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.NOT_FOUND_USER, Constants.ErrorMessage.USER_NOT_FOUND);
+            }
+            User updatedUser = IUserMapper.INSTANCE.toEntity(userRequest);
+            String password = UtilService.encrypt(userRequest.getPassword());
+            userRequest.setPassword(password);
+            updatedUser.setUserID(existingUser.getUserID());
+            updatedUser.setUpdateDt(new Date());
+            updatedUser.setUpdateBy(Constants.ADMIN);
+
+            boolean updated = userRepository.updateUser(updatedUser);
+            if (!updated) {
+                throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.UPDATE_USER_FAILD, Constants.ErrorMessage.UPDATE_USER_FAILD);
+            }
+        } catch (ApiException e) {
         }
     }
 
@@ -146,7 +151,7 @@ public class UserService implements IUserService {
     public void deleteUser(int userID) {
         boolean isSuccess = userRepository.deleteUser(userID);
         if (!isSuccess) {
-            throw new RuntimeException("Failed to update user with ID: ");
+            throw new ApiException(Constants.ErrorTitle.USER, Constants.ErrorCode.DELETE_USER, Constants.ErrorMessage.DELETE_USER_FAILD);
         }
     }
 

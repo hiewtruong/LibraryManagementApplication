@@ -31,11 +31,6 @@ public class TransactionLoanPanel extends JPanel {
     private JComboBox<String> searchColumnComboBox;
     private Map<String, String> columnMapping;
 
-    // Định nghĩa hằng số cho trạng thái
-    public static class TransLoanStatusConsts {
-        public static final int BORROW = 0;
-        public static final int PAID = 1;
-    }
 
     public TransactionLoanPanel(List<TransactionLoanHeaderDTO> transHeaders, JPanel contentPanel) {
         this.contentPanel = contentPanel;
@@ -82,7 +77,6 @@ public class TransactionLoanPanel extends JPanel {
         topPanel.add(rightPanel, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
-        // Di chuyển cột "Status" lên sau "Loan Ticket Number"
         String[] columnNames = {
             "View", "Loan Header ID", "Loan Ticket Number", "Status", "User Name", "Email",
             "Phone", "Total Qty", "Loan Date", "Return Date", "Created By",
@@ -128,7 +122,6 @@ public class TransactionLoanPanel extends JPanel {
             }
         });
 
-        // Cài đặt kích thước cột
         transactionTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMinWidth(50);
         transactionTable.getColumnModel().getColumn(0).setMaxWidth(50);
@@ -140,8 +133,7 @@ public class TransactionLoanPanel extends JPanel {
         transactionTable.getColumnModel().getColumn(2).setPreferredWidth(200);
         transactionTable.getColumnModel().getColumn(2).setMinWidth(200);
         transactionTable.getColumnModel().getColumn(2).setMaxWidth(200);
-
-        // Kích thước cho cột "Status"
+        
         transactionTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         transactionTable.getColumnModel().getColumn(3).setMinWidth(100);
         transactionTable.getColumnModel().getColumn(3).setMaxWidth(100);

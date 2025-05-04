@@ -2,17 +2,13 @@ package com.uit.librarymanagementapplication.domain.repository.AuthorRepositorie
 
 import com.uit.librarymanagementapplication.domain.DbUtils;
 import com.uit.librarymanagementapplication.domain.entity.Author;
-import com.uit.librarymanagementapplication.domain.repository.UserRepositories.UserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author hieutruong
- */
+
 public class AuthorRepository implements IAuthorRepository {
 
     private static AuthorRepository instance;
@@ -56,6 +52,7 @@ public class AuthorRepository implements IAuthorRepository {
 
     @Override
     public boolean createAuthor(Author author) {
+        boolean isSuccess = false;
         String sql = "INSERT INTO [dbo].[Authors] (AuthorName, IsDelete, CreatedDt, CreatedBy, UpdateDt, UpdateBy) "
                 + "VALUES (?, 0, GETDATE(), ?, GETDATE(), ?)";
 
@@ -69,7 +66,7 @@ public class AuthorRepository implements IAuthorRepository {
                 int rowsInserted = stmt.executeUpdate();
                 if (rowsInserted > 0) {
                     DbUtils.commit();
-                    return true;
+                    isSuccess = true;
                 } else {
                     DbUtils.rollback();
                 }
@@ -80,7 +77,7 @@ public class AuthorRepository implements IAuthorRepository {
         } finally {
             DbUtils.close();
         }
-        return false;
+        return isSuccess;
     }
 
     @Override

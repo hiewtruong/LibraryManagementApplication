@@ -1,7 +1,10 @@
 package com.uit.librarymanagementapplication.view.admin.author;
 
 import com.uit.librarymanagementapplication.controller.AuthorController;
+import com.uit.librarymanagementapplication.lib.ApiException;
 import com.uit.librarymanagementapplication.lib.Constants.ConfirmConsts;
+import com.uit.librarymanagementapplication.lib.Constants.SuccessMessage;
+import com.uit.librarymanagementapplication.lib.Constants.ValidateMessage;
 import com.uit.librarymanagementapplication.service.AuthorServices.AuthorService;
 import com.uit.librarymanagementapplication.service.AuthorServices.IAuthorService;
 import com.uit.librarymanagementapplication.view.lib.CommonUI;
@@ -63,24 +66,25 @@ public class CreateAuthorModal extends JDialog {
         add(footerPanel, BorderLayout.SOUTH);
 
         btnSave.addActionListener(e -> {
-            String name = txtAuthorName.getText().trim();
-            if (!name.isEmpty()) {
-                int response = CommonUI.showConfirmDialog(this, ConfirmConsts.CONFIRM_CONTENT, ConfirmConsts.CONFIRM_TITLE);
-                if (response == JOptionPane.YES_OPTION) {
-                    boolean isSuccess = authorService.createAuthors(name);
-                    if (isSuccess) {
-                        CommonUI.showSuccess(this, "Create author successful");
-                        dispose();
-                        authorController.Init(contentPanel, true);
-                    } else {
-                        CommonUI.showError(this, "Create author failed");
+            try {
+                String name = txtAuthorName.getText().trim();
+                if (!name.isEmpty()) {
+                    int response = CommonUI.showConfirmDialog(this, ConfirmConsts.CONFIRM_CONTENT, ConfirmConsts.CONFIRM_TITLE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        boolean isSuccess = authorService.createAuthors(name);
+                        if (isSuccess) {
+                            CommonUI.showSuccess(this, SuccessMessage.CREATE_AUTHOR_SUCCESS);
+                            dispose();
+                            authorController.Init(contentPanel, true);
+                        }
                     }
+                } else {
+                    CommonUI.showAlerValidate(this, ValidateMessage.NAME_CAN_NOT_EMPTY);
                 }
-            } else {
-                CommonUI.showAlerValidate(this, "Name can not empty");
+            } catch (ApiException ex) {
+                CommonUI.showErrorApi(this, ex);
             }
         });
-
         btnCancel.addActionListener(e -> dispose());
     }
 }

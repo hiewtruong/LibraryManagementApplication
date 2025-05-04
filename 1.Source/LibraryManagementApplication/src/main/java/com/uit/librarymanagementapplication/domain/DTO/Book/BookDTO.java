@@ -46,7 +46,6 @@ public class BookDTO {
         this.updateBy = updateBy;
     }
 
-    // Getters và Setters
     public int getBookID() {
         return bookID;
     }

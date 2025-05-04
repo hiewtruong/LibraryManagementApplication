@@ -1,8 +1,10 @@
-package com.uit.librarymanagementapplication.domain.entity;
+package com.uit.librarymanagementapplication.domain.DTO.Book;
 
 import java.util.Date;
 
-public class Book {
+
+public class BookTransactionLoanDTO {
+    
     private int bookID;
     private String title;
     private String author;
@@ -21,13 +23,12 @@ public class Book {
     private String createdBy;
     private Date updateDt;
     private String updateBy;
+   private boolean isOutOfStock;
 
-    public Book() {
+    public BookTransactionLoanDTO() {
     }
 
-    
-    
-    public Book(int bookID, String title, String author, String cover, String landingPage, String hashtag, String genreCategory, String publisher, Date publishYear, String location, int isDisplay, int qtyOH, int qtyAllocated, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy) {
+    public BookTransactionLoanDTO(int bookID, String title, String author, String cover, String landingPage, String hashtag, String genreCategory, String publisher, Date publishYear, String location, int isDisplay, int qtyOH, int qtyAllocated, int isDelete, Date createdDt, String createdBy, Date updateDt, String updateBy, boolean isOutOfStock) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
@@ -46,6 +47,7 @@ public class Book {
         this.createdBy = createdBy;
         this.updateDt = updateDt;
         this.updateBy = updateBy;
+        this.isOutOfStock = isOutOfStock;
     }
 
     public int getBookID() {
@@ -191,6 +193,15 @@ public class Book {
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
+
+    public boolean isIsOutOfStock() {
+        return isOutOfStock;
+    }
+
+    public void setIsOutOfStock(boolean isOutOfStock) {
+        this.isOutOfStock = isOutOfStock;
+    }
+
     
     
 }

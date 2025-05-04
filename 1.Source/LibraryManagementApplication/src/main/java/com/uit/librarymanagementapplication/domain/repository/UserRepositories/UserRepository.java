@@ -36,9 +36,9 @@ public class UserRepository implements IUserRepository {
                 + "JOIN [dbo].[UserRoles] r ON u.UserRoleID_FK = r.UserRoleID "
                 + "WHERE u.UserName = ? AND u.IsDelete = 0";
         try (
-                 Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            try ( ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     user = new UserRoleDTO(
                             rs.getInt("UserID"),
@@ -108,9 +108,9 @@ public class UserRepository implements IUserRepository {
                 + "WHERE u.UserName = ? AND u.IsDelete = 0";
 
         try (
-                 Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            try ( ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     user = new UserDTO(
                             rs.getInt("UserID"),
@@ -324,6 +324,46 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public List<UserRoleDTO> getAllUsersCustomer() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<UserRoleDTO> userList = new ArrayList<>();
+
+        String sql = """
+            SELECT u.*, r.RoleName, r.IsAdmin
+            FROM [dbo].[Users] u
+            JOIN [dbo].[UserRoles] r ON u.UserRoleID_FK = r.UserRoleID
+            WHERE u.IsDelete = 0 AND r.IsAdmin = 0
+            ORDER BY u.UserID DESC
+        """;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserRoleDTO user = new UserRoleDTO(
+                        rs.getInt("UserID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("UserName"),
+                        rs.getString("Password"),
+                        rs.getInt("Gender"),
+                        rs.getString("Email"),
+                        rs.getString("Phone"),
+                        rs.getString("Address"),
+                        rs.getInt("UserRoleID_FK"),
+                        rs.getInt("IsDelete"),
+                        rs.getInt("IsAdmin"),
+                        rs.getString("RoleName")
+                );
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving users: " + e.getMessage(), e);
+        } finally {
+            DbUtils.close();
+        }
+        return userList;
     }
 }

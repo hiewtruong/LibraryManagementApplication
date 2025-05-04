@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uit.librarymanagementapplication.view.admin.transactionLoan;
 
 import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
+import com.uit.librarymanagementapplication.lib.Constants.ValidateMessage;
 import com.uit.librarymanagementapplication.view.lib.CommonUI;
 import java.awt.*;
 import java.util.List;
@@ -104,10 +101,9 @@ public class TransactionUserChooseModal extends JDialog {
                 selectedUser.setEmail((String) userTable.getValueAt(selectedRow, 2));
                 dispose();
             } else {
-                CommonUI.showAlerValidate(this, "Please select a user!");
+                CommonUI.showAlerValidate(this, ValidateMessage.CHOOSE_USER);
             }
         });
-
         JButton btnCancel = new JButton("Cancel");
         btnCancel.setFont(new Font("Arial", Font.PLAIN, 14));
         btnCancel.setForeground(Color.RED);

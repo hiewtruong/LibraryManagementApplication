@@ -12,6 +12,8 @@ import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDet
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanDetailRepositories.TransactionLoanDetailRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories.ITransactionLoanHeaderRepository;
 import com.uit.librarymanagementapplication.domain.repository.TransactionLoanHeaderRepositories.TransactionLoanHeaderRepository;
+import com.uit.librarymanagementapplication.lib.ApiException;
+import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.lib.Constants.TransLoanStatusConsts;
 import com.uit.librarymanagementapplication.service.GenreCategoryServices.GenreCategoryService;
 import java.util.ArrayList;
@@ -21,14 +23,14 @@ public class TransactionLoanService implements ITransactionLoanService {
 
     private final ITransactionLoanHeaderRepository transactionLoanHeaderRepository;
     private final ITransactionLoanDetailRepository transactionLoanDetailRepository;
-    //private final IBookRepository bookRepository;
+    private final IBookRepository bookRepository;
     private static TransactionLoanService instance;
     private static GenreCategoryService categoryService = new GenreCategoryService();
 
     public TransactionLoanService() {
         this.transactionLoanHeaderRepository = TransactionLoanHeaderRepository.getInstance();
         this.transactionLoanDetailRepository = TransactionLoanDetailRepository.getInstance();
-        //this.bookRepository = BookRepository.getInstance();
+        this.bookRepository = BookRepository.getInstance();
     }
 
     public static TransactionLoanService getInstance() {
@@ -98,11 +100,11 @@ public class TransactionLoanService implements ITransactionLoanService {
             DbUtils.beginTransaction();
             int headerId = transactionLoanHeaderRepository.createTransactionLoanHeader(request);
             transactionLoanDetailRepository.createTransactionLoanDetails(headerId, request.getLoanDetails());
-            //bookRepository.updateQtyAllocated(request.getLoanDetails());
+            bookRepository.updateQtyAllocated(request.getLoanDetails());
             DbUtils.commit();
         } catch (Exception e) {
             DbUtils.rollback();
-            System.err.println("Failed to create transaction loan: " + e.getMessage());
+            throw new ApiException(Constants.ErrorTitle.TRANS, Constants.ErrorCode.CREATE_TRANS_FAILED, Constants.ErrorMessage.CREATE_TRANS_FAILED);
         } finally {
             DbUtils.close();
 
@@ -114,11 +116,11 @@ public class TransactionLoanService implements ITransactionLoanService {
         try {
             DbUtils.beginTransaction();
             transactionLoanHeaderRepository.updateStatusRevoke(request.getLoanHeaderID());
-            //bookRepository.decrementQtyAllocated(request.getLoanDetails());
+            bookRepository.decrementQtyAllocated(request.getLoanDetails());
             DbUtils.commit();
         } catch (Exception e) {
             DbUtils.rollback();
-            System.err.println("Failed to revoke transaction loan: " + e.getMessage());
+            throw new ApiException(Constants.ErrorTitle.TRANS, Constants.ErrorCode.REVOKE_TRANS_FAILED, Constants.ErrorMessage.REVOKE_TRANS_FAILED);
         } finally {
             DbUtils.close();
         }

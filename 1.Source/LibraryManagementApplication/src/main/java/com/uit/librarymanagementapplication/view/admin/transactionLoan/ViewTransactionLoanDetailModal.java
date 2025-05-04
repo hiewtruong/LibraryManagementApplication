@@ -5,10 +5,12 @@ import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.Transacti
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailRequestDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRevokeDTO;
+import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.lib.FormatHelper;
 import com.uit.librarymanagementapplication.lib.Constants.DateFormat;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.ITransactionLoanService;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.TransactionLoanService;
+import com.uit.librarymanagementapplication.view.lib.CommonUI;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,8 @@ public class ViewTransactionLoanDetailModal extends JDialog {
     ITransactionLoanService transactionLoanService = TransactionLoanService.getInstance();
     TransacitonLoanController transactionLoanController = new TransacitonLoanController();
     private JPanel contentPanel;
-    private TransactionLoanHeaderDTO headerDto; // Lưu headerDto để sử dụng trong revokeTransaction
-    private List<TransactionLoanDetailDTO> detailsDto; // Lưu detailsDto
+    private TransactionLoanHeaderDTO headerDto;
+    private List<TransactionLoanDetailDTO> detailsDto;
 
     private JButton btnClose;
     private JButton btnRevoke;
@@ -29,8 +31,8 @@ public class ViewTransactionLoanDetailModal extends JDialog {
     public ViewTransactionLoanDetailModal(JFrame parentFrame, JPanel contentPanel, TransactionLoanHeaderDTO headerDto, List<TransactionLoanDetailDTO> detailsDto) {
         super(parentFrame, "Transaction Loan Details", true);
         this.contentPanel = contentPanel;
-        this.headerDto = headerDto; // Lưu headerDto
-        this.detailsDto = detailsDto; // Lưu detailsDto
+        this.headerDto = headerDto;
+        this.detailsDto = detailsDto;
         initUI(headerDto, detailsDto);
         setLocationRelativeTo(parentFrame);
         setResizable(false);
@@ -253,22 +255,22 @@ public class ViewTransactionLoanDetailModal extends JDialog {
     }
 
     private void revokeTransaction() {
-        TransactionLoanHeaderRevokeDTO revokeDto = new TransactionLoanHeaderRevokeDTO();
-        revokeDto.setLoanHeaderID(headerDto.getLoanHeaderID());
-        List<TransactionLoanDetailRequestDTO> loanDetails = new ArrayList<>();
-        for (TransactionLoanDetailDTO detail : detailsDto) {
-            TransactionLoanDetailRequestDTO detailRequest = new TransactionLoanDetailRequestDTO();
-            detailRequest.setLoadBookID(detail.getBookID());
-            loanDetails.add(detailRequest);
-        }
-        revokeDto.setLoanDetails(loanDetails);
-        try {
+        int response = CommonUI.showConfirmDialog(this, Constants.ConfirmConsts.CONFIRM_REVOKE_CONTENT, Constants.ConfirmConsts.CONFIRM_TITLE);
+        if (response == JOptionPane.YES_OPTION) {
+            TransactionLoanHeaderRevokeDTO revokeDto = new TransactionLoanHeaderRevokeDTO();
+            revokeDto.setLoanHeaderID(headerDto.getLoanHeaderID());
+            List<TransactionLoanDetailRequestDTO> loanDetails = new ArrayList<>();
+            for (TransactionLoanDetailDTO detail : detailsDto) {
+                TransactionLoanDetailRequestDTO detailRequest = new TransactionLoanDetailRequestDTO();
+                detailRequest.setLoadBookID(detail.getBookID());
+                loanDetails.add(detailRequest);
+            }
+            revokeDto.setLoanDetails(loanDetails);
             transactionLoanService.revokeTransactionLoan(revokeDto);
-            JOptionPane.showMessageDialog(this, "Transaction revoked successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            transactionLoanController.Init(contentPanel,true);
+            CommonUI.showSuccess(this, Constants.SuccessMessage.REVOKE_TRANS_SUCCESS);
+            transactionLoanController.Init(contentPanel, true);
             dispose();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Failed to revoke transaction: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 }

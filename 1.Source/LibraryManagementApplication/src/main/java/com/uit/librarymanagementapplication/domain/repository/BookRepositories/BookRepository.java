@@ -5,6 +5,7 @@
  */
 package com.uit.librarymanagementapplication.domain.repository.BookRepositories;
 
+import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailRequestDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
 import com.uit.librarymanagementapplication.domain.entity.Book;
 
@@ -14,12 +15,25 @@ import java.util.List;
 
 public class BookRepository implements IBookRepository {
 
+    private static BookRepository instance;
+
+    public BookRepository() {
+
+    }
+
+    public static BookRepository getInstance() {
+        if (instance == null) {
+            instance = new BookRepository();
+        }
+        return instance;
+    }
+
     @Override
     public List<Book> findAllBooks() {
         List<Book> books = new ArrayList<>();
         String sql = "SELECT * FROM [dbo].[Books] WHERE IsDelete = 0";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Book book = new Book(
@@ -56,10 +70,10 @@ public class BookRepository implements IBookRepository {
         Book book = null;
         String sql = "SELECT * FROM [dbo].[Books] WHERE BookID = ? AND IsDelete = 0";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, bookID);
-            try ( ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     book = new Book(
                             rs.getInt("BookID"),
@@ -96,7 +110,7 @@ public class BookRepository implements IBookRepository {
                 + "(Title, Author, Cover, LandingPage, Hashtag, GenreCategory, Publisher, PublishYear, Location, IsDisplay, QtyOH, QtyAllocated, IsDelete, CreatedDt, CreatedBy, UpdateDt, UpdateBy) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, GETDATE(), ?, GETDATE(), ?)";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, book.getTitle());
             stmt.setString(2, book.getAuthor());
@@ -129,7 +143,7 @@ public class BookRepository implements IBookRepository {
                 + "Title = ?, Author = ?, Cover = ?, LandingPage = ?, Hashtag = ?, GenreCategory = ?, Publisher = ?, PublishYear = ?, Location = ?, IsDisplay = ?, QtyOH = ?, QtyAllocated = ?, UpdateDt = GETDATE(), UpdateBy = ? "
                 + "WHERE BookID = ? AND IsDelete = 0";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, book.getTitle());
             stmt.setString(2, book.getAuthor());
@@ -159,7 +173,7 @@ public class BookRepository implements IBookRepository {
     public boolean deleteBook(int bookID) {
         String sql = "UPDATE [dbo].[Books] SET IsDelete = 1 WHERE BookID = ?";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, bookID);
             return stmt.executeUpdate() > 0;
@@ -176,12 +190,11 @@ public class BookRepository implements IBookRepository {
         List<Book> books = new ArrayList<>();
         String sql = "SELECT * FROM [dbo].[Books] WHERE Title LIKE %?%";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        
             stmt.setString(1, "%" + title + "%");
 
-            try ( ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Book book = new Book(
                             rs.getInt("BookID"),
@@ -217,7 +230,7 @@ public class BookRepository implements IBookRepository {
     public void updateBookQuantity(int bookId, int qtyOH, int qtyAllocated) {
         String sql = "UPDATE Books SET QtyOH = ?, QtyAllocated = ? WHERE BookID = ?";
 
-        try ( Connection conn = DbUtils.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, qtyOH);
             stmt.setInt(2, qtyAllocated);
@@ -228,5 +241,90 @@ public class BookRepository implements IBookRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Book> getAllBooks() {
+               List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Books] WHERE IsDelete = 0 ORDER BY BookID DESC";
+
+        try (
+                Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookID(rs.getInt("BookID"));
+                book.setTitle(rs.getString("Title"));
+                book.setAuthor(rs.getString("Author"));
+                book.setCover(rs.getString("Cover"));
+                book.setLandingPage(rs.getString("LandingPage"));
+                book.setHashtag(rs.getString("Hashtag"));
+                book.setGenreCategory(rs.getString("GenreCategory"));
+                book.setPublisher(rs.getString("Publisher"));
+                book.setPublishYear(rs.getDate("PublishYear"));
+                book.setLocation(rs.getString("Location"));
+                book.setIsDisplay(rs.getInt("IsDisplay"));
+                book.setQtyOH(rs.getInt("QtyOH"));
+                book.setQtyAllocated(rs.getInt("QtyAllocated"));
+                book.setIsDelete(rs.getInt("IsDelete"));
+                book.setCreatedDt(rs.getTimestamp("CreatedDt"));
+                book.setCreatedBy(rs.getString("CreatedBy"));
+                book.setUpdateDt(rs.getTimestamp("UpdateDt"));
+                book.setUpdateBy(rs.getString("UpdateBy"));
+
+                books.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.close();
+        }
+
+        return books;
+
+    }
+
+      @Override
+    public void updateQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails) {
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "UPDATE Books SET QtyAllocated = QtyAllocated + 1 WHERE BookID = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                for (TransactionLoanDetailRequestDTO detail : loanDetails) {
+                    stmt.setLong(1, detail.getLoadBookID());
+                    stmt.addBatch();
+                }
+                int[] rowsAffected = stmt.executeBatch();
+                for (int rows : rowsAffected) {
+                    if (rows == 0) {
+                        throw new SQLException("Updating QtyAllocated failed, no rows affected.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating QtyAllocated: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void decrementQtyAllocated(List<TransactionLoanDetailRequestDTO> loanDetails) {
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "UPDATE Books SET QtyAllocated = QtyAllocated - 1 WHERE BookID = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                for (TransactionLoanDetailRequestDTO detail : loanDetails) {
+                    stmt.setLong(1, detail.getLoadBookID());
+                    stmt.addBatch();
+                }
+                int[] rowsAffected = stmt.executeBatch();
+                for (int rows : rowsAffected) {
+                    if (rows == 0) {
+                        throw new SQLException("Decrementing QtyAllocated failed, no rows affected.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error decrementing QtyAllocated: " + e.getMessage(), e);
+        }
+    }
+
 
 }

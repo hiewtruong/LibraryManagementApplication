@@ -1,12 +1,16 @@
 package com.uit.librarymanagementapplication.view.admin.transactionLoan;
 
 import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
-import com.uit.librarymanagementapplication.domain.DTO.Book.BookDTO;
+import com.uit.librarymanagementapplication.domain.DTO.Book.BookTransactionLoanDTO;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserRoleDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanDetailRequestDTO;
+import com.uit.librarymanagementapplication.lib.ApiException;
+import com.uit.librarymanagementapplication.lib.Constants;
+import com.uit.librarymanagementapplication.lib.Constants.DateFormat;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.ITransactionLoanService;
 import com.uit.librarymanagementapplication.service.TransactionLoanServices.TransactionLoanService;
+import com.uit.librarymanagementapplication.view.lib.CommonUI;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,18 +30,18 @@ public class CreateTransactionLoanPanel extends JPanel {
     private JFormattedTextField loanReturnDtField;
     private DefaultTableModel availableBooksModel;
     private DefaultTableModel selectedBooksModel;
-    private List<BookDTO> selectedBooksList;
-    private List<BookDTO> allBooks;
+    private List<BookTransactionLoanDTO> selectedBooksList;
+    private List<BookTransactionLoanDTO> allBooks;
     private JTextField searchField;
     private JTextField searchFieldSelected;
     private TransacitonLoanController transController = new TransacitonLoanController();
     private ITransactionLoanService transactionLoanService = TransactionLoanService.getInstance();
     private TransactionLoanHeaderRequestDTO transactionRequestDTO;
     private JLabel lblTotalQuantity;
-    private JTable availableBooksTable; // Thêm biến instance để lưu availableBooksTable
-    private JTable selectedBooksTable;  // Thêm biến instance để lưu selectedBooksTable
+    private JTable availableBooksTable;
+    private JTable selectedBooksTable;
 
-    public CreateTransactionLoanPanel(JPanel contentPane, List<UserRoleDTO> users, List<BookDTO> books) {
+    public CreateTransactionLoanPanel(JPanel contentPane, List<UserRoleDTO> users, List<BookTransactionLoanDTO> books) {
         this.contentPanel = contentPane;
         this.selectedBooksList = new ArrayList<>();
         this.allBooks = new ArrayList<>(books);
@@ -45,7 +49,7 @@ public class CreateTransactionLoanPanel extends JPanel {
         initUI(users, books);
     }
 
-    private void initUI(List<UserRoleDTO> users, List<BookDTO> books) {
+    private void initUI(List<UserRoleDTO> users, List<BookTransactionLoanDTO> books) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Create Transaction Loan"));
         setBackground(new Color(242, 242, 242));
@@ -145,8 +149,8 @@ public class CreateTransactionLoanPanel extends JPanel {
         JPanel availableBooksInnerPanel = new JPanel(new BorderLayout(5, 5));
         availableBooksInnerPanel.setBackground(new Color(242, 242, 242));
         availableBooksInnerPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createTitledBorder("Available Books"),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                BorderFactory.createTitledBorder("Available Books"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
 
         JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
@@ -185,33 +189,32 @@ public class CreateTransactionLoanPanel extends JPanel {
             }
         };
 
-        availableBooksTable = new JTable(availableBooksModel); // Lưu vào biến instance
+        availableBooksTable = new JTable(availableBooksModel);
         availableBooksTable.setFont(new Font("Arial", Font.PLAIN, 14));
         availableBooksTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         availableBooksTable.setRowHeight(25);
         availableBooksTable.setShowGrid(true);
         availableBooksTable.setGridColor(Color.LIGHT_GRAY);
 
-        //availableBooksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            //@Override
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//                int bookId = (int) table.getModel().getValueAt(row, 0);
-//                BookDTO book = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
-//                if (book != null && book.isIsOutOfStock()) {
-//                    c.setForeground(Color.RED);
-//                } else {
-//                    c.setForeground(Color.BLACK);
-//                }
-//                return c;
-//            }
-        //});
-
+        availableBooksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                int bookId = (int) table.getModel().getValueAt(row, 0);
+                BookTransactionLoanDTO book = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
+                if (book != null && book.isIsOutOfStock()) {
+                    c.setForeground(Color.RED);
+                } else {
+                    c.setForeground(Color.BLACK);
+                }
+                return c;
+            }
+        });
         TableColumn bookIdColumn = availableBooksTable.getColumnModel().getColumn(0);
         availableBooksTable.getColumnModel().removeColumn(bookIdColumn);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        for (BookDTO book : books) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
+        for (BookTransactionLoanDTO book : books) {
             String formattedPublishYear = dateFormat.format(book.getPublishYear());
             Object[] rowData = {
                 book.getBookID(),
@@ -257,8 +260,8 @@ public class CreateTransactionLoanPanel extends JPanel {
         JPanel selectedBooksInnerPanel = new JPanel(new BorderLayout(5, 5));
         selectedBooksInnerPanel.setBackground(new Color(242, 242, 242));
         selectedBooksInnerPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createTitledBorder("Selected Books"),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                BorderFactory.createTitledBorder("Selected Books"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
 
         JPanel searchPanelSelected = new JPanel(new BorderLayout(5, 5));
@@ -296,7 +299,7 @@ public class CreateTransactionLoanPanel extends JPanel {
             }
         };
 
-        selectedBooksTable = new JTable(selectedBooksModel); // Lưu vào biến instance
+        selectedBooksTable = new JTable(selectedBooksModel);
         selectedBooksTable.setFont(new Font("Arial", Font.PLAIN, 14));
         selectedBooksTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         selectedBooksTable.setRowHeight(25);
@@ -328,8 +331,8 @@ public class CreateTransactionLoanPanel extends JPanel {
         String keyword = searchField.getText().trim().toLowerCase();
         availableBooksModel.setRowCount(0);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        for (BookDTO book : allBooks) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
+        for (BookTransactionLoanDTO book : allBooks) {
             if (selectedBooksList.stream().noneMatch(selectedBook -> selectedBook.getBookID() == book.getBookID())) {
                 if (keyword.isEmpty() || book.getTitle().toLowerCase().contains(keyword)) {
                     String formattedPublishYear = dateFormat.format(book.getPublishYear());
@@ -351,8 +354,8 @@ public class CreateTransactionLoanPanel extends JPanel {
         String keyword = searchFieldSelected.getText().trim().toLowerCase();
         selectedBooksModel.setRowCount(0);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        for (BookDTO book : selectedBooksList) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
+        for (BookTransactionLoanDTO book : selectedBooksList) {
             if (keyword.isEmpty() || book.getTitle().toLowerCase().contains(keyword)) {
                 String formattedPublishYear = dateFormat.format(book.getPublishYear());
                 Object[] rowData = {
@@ -371,8 +374,8 @@ public class CreateTransactionLoanPanel extends JPanel {
     private void refreshAvailableBooks() {
         searchField.setText("");
         availableBooksModel.setRowCount(0);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        for (BookDTO book : allBooks) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
+        for (BookTransactionLoanDTO book : allBooks) {
             if (selectedBooksList.stream().noneMatch(selectedBook -> selectedBook.getBookID() == book.getBookID())) {
                 String formattedPublishYear = dateFormat.format(book.getPublishYear());
                 Object[] rowData = {
@@ -391,8 +394,8 @@ public class CreateTransactionLoanPanel extends JPanel {
     private void refreshSelectedBooks() {
         searchFieldSelected.setText("");
         selectedBooksModel.setRowCount(0);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        for (BookDTO book : selectedBooksList) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
+        for (BookTransactionLoanDTO book : selectedBooksList) {
             String formattedPublishYear = dateFormat.format(book.getPublishYear());
             Object[] rowData = {
                 book.getBookID(),
@@ -422,41 +425,42 @@ public class CreateTransactionLoanPanel extends JPanel {
 
     private void saveTransaction() {
         if (lblSelectedUser.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please choose a user!", "Warning", JOptionPane.WARNING_MESSAGE);
+            CommonUI.showAlerValidate(this, Constants.ValidateMessage.CHOOSE_USER);
             return;
         }
         Date returnDate = parseLoanReturnDate();
         if (returnDate == null) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid loan return date (MM/dd/yyyy)!", "Warning", JOptionPane.WARNING_MESSAGE);
+            CommonUI.showAlerValidate(this, Constants.ValidateMessage.CORRECT_FORMAT_DATE);
             return;
         }
-        if (selectedBooksList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select at least one book!", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         transactionRequestDTO.setLoanReturnDt(returnDate);
-
+        if (selectedBooksList.isEmpty()) {
+            CommonUI.showAlerValidate(this, Constants.ValidateMessage.SELECT_AT_LEAST_A_BOOK);
+            return;
+        }
         List<TransactionLoanDetailRequestDTO> loanDetails = new ArrayList<>();
-        for (BookDTO book : selectedBooksList) {
+        for (BookTransactionLoanDTO book : selectedBooksList) {
             TransactionLoanDetailRequestDTO detail = new TransactionLoanDetailRequestDTO();
             detail.setLoadBookID(book.getBookID());
             loanDetails.add(detail);
         }
         transactionRequestDTO.setLoanDetails(loanDetails);
-
-        try {
-            transactionLoanService.createTransactionLoan(transactionRequestDTO);
-            JOptionPane.showMessageDialog(this, "Transaction saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            lblSelectedUser.setText("");
-            lblUserPrompt.setText("Please Choose User");
-            loanReturnDtField.setText("");
-            selectedBooksList.clear();
-            refreshAvailableBooks();
-            refreshSelectedBooks();
-            transactionRequestDTO = new TransactionLoanHeaderRequestDTO();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Failed to save transaction: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        int response = CommonUI.showConfirmDialog(this, Constants.ConfirmConsts.CONFIRM_CONTENT, Constants.ConfirmConsts.CONFIRM_TITLE);
+        if (response == JOptionPane.YES_OPTION) {
+            try {
+                transactionLoanService.createTransactionLoan(transactionRequestDTO);
+                CommonUI.showSuccess(this, Constants.SuccessMessage.CREATE_TRANS_SUCCESS);
+                lblSelectedUser.setText("");
+                lblUserPrompt.setText("Please Choose User");
+                loanReturnDtField.setText("");
+                selectedBooksList.clear();
+                refreshAvailableBooks();
+                refreshSelectedBooks();
+                transactionRequestDTO = new TransactionLoanHeaderRequestDTO();
+                transController.Init(contentPanel, false);
+            } catch (ApiException ex) {
+                CommonUI.showErrorApi(this, ex);
+            }
         }
     }
 
@@ -466,7 +470,7 @@ public class CreateTransactionLoanPanel extends JPanel {
             return null;
         }
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.MMddyyyy);
             dateFormat.setLenient(false);
             return dateFormat.parse(dateStr);
         } catch (Exception e) {
@@ -478,27 +482,23 @@ public class CreateTransactionLoanPanel extends JPanel {
         int selectedRow = availableBooksTable.getSelectedRow();
         if (selectedRow != -1) {
             int bookId = (int) availableBooksModel.getValueAt(selectedRow, 0);
-            BookDTO selectedBook = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
-
-//            if (selectedBook != null && selectedBook.isIsOutOfStock()) {
-//                JOptionPane.showMessageDialog(this, "This book is out of stock and cannot be selected!", "Warning", JOptionPane.WARNING_MESSAGE);
-//                return;
-//            }
-
+            BookTransactionLoanDTO selectedBook = allBooks.stream().filter(b -> b.getBookID() == bookId).findFirst().orElse(null);
+            if (selectedBook != null && selectedBook.isIsOutOfStock()) {
+                CommonUI.showAlerValidate(this, Constants.ValidateMessage.BOOK_OUT_OF_STOCK);
+                return;
+            }
             Object[] rowData = new Object[availableBooksModel.getColumnCount()];
             for (int i = 0; i < rowData.length; i++) {
                 rowData[i] = availableBooksModel.getValueAt(selectedRow, i);
             }
-
             selectedBooksModel.addRow(rowData);
             availableBooksModel.removeRow(selectedRow);
-
             selectedBooksList.add(selectedBook);
             performSearch();
             performSearchSelected();
             updateTotalQuantity();
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a book to add!", "Warning", JOptionPane.WARNING_MESSAGE);
+            CommonUI.showAlerValidate(this, Constants.ValidateMessage.SELECT_MOVE_BOOK_TO_ADD);
         }
     }
 
@@ -520,21 +520,11 @@ public class CreateTransactionLoanPanel extends JPanel {
             performSearchSelected();
             updateTotalQuantity();
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a book to remove!", "Warning", JOptionPane.WARNING_MESSAGE);
+            CommonUI.showAlerValidate(this, Constants.ValidateMessage.SELECT_BOOK_REMOVE);
         }
     }
 
-    private Date parseLoanReturnDateFromString(String dateStr) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            dateFormat.setLenient(false);
-            return dateFormat.parse(dateStr);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public List<BookDTO> getSelectedBooks() {
+    public List<BookTransactionLoanDTO> getSelectedBooks() {
         return selectedBooksList;
     }
 

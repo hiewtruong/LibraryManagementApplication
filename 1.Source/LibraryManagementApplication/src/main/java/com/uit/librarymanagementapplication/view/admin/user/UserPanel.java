@@ -41,10 +41,8 @@ public class UserPanel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 20, 10, 20)
         ));
 
-        // Top panel: Search bar and Create button
         JPanel topPanel = new JPanel(new BorderLayout());
 
-        // Left panel: Search components
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         columnMapping = new HashMap<>();
@@ -70,7 +68,6 @@ public class UserPanel extends JPanel {
         leftPanel.add(searchButton);
         topPanel.add(leftPanel, BorderLayout.WEST);
 
-        // Right panel: Create button
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         createButton = new JButton("Create");
         createButton.addActionListener(e -> createNewUser());
@@ -78,7 +75,6 @@ public class UserPanel extends JPanel {
         topPanel.add(rightPanel, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
-        // Center: Table to display users
         String[] columnNames = {
             "Edit", "User ID", "First Name", "Last Name", "User Name", "Email", "Phone",
             "Gender", "Address"
@@ -123,7 +119,6 @@ public class UserPanel extends JPanel {
             }
         });
 
-        // Set column widths
         userTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         userTable.getColumnModel().getColumn(0).setMinWidth(100);
         userTable.getColumnModel().getColumn(0).setMaxWidth(100);
@@ -170,7 +165,6 @@ public class UserPanel extends JPanel {
         ));
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom panel: Total label
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         totalLabel = new JLabel("Total: 0");
         totalLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -214,7 +208,6 @@ public class UserPanel extends JPanel {
     }
 
     private class HyperlinkRenderer extends DefaultTableCellRenderer {
-
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
