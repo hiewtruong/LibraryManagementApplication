@@ -47,6 +47,8 @@ public class Constants {
         public static final String BOOK_OUT_OF_STOCK = "This book is out of stock and cannot be selected!";
         public static final String SELECT_MOVE_BOOK_TO_ADD = "Please select a book to add!";
         public static final String SELECT_BOOK_REMOVE = "Please select a book to remove";
+         public static final String EMAIL_IS_DUPLICATE = "Email is already exist";
+          public static final String USERNAME_IS_DUPLICATE = "UserName is already exist";
     }
 
     public class SuccessMessage {
@@ -95,7 +97,8 @@ public class Constants {
     }
 
     public class EmailConstants {
-        public static final String EMAIL_SUBJECT_ACCOUNT_CREATED = "Your Account Has Been Successfully Created";
+        public static final String EMAIL_SUBJECT_ACCOUNT_CREATED = "UIT-LMS | Your Account Has Been Successfully Created";
+        public static final String LOAN_BOOK_SUBJECT = "Your Book Loan Confirmation - Ticket #%s";
     }
 
 }

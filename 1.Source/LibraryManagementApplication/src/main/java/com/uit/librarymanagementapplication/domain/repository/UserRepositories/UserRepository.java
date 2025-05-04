@@ -366,4 +366,36 @@ public class UserRepository implements IUserRepository {
         }
         return userList;
     }
+
+    @Override
+    public boolean checkUsernameUniq(String userName) {
+           boolean isUnique = true;
+
+        String sql = """
+            SELECT COUNT(*) 
+            FROM [dbo].[Users] 
+            WHERE UserName = ? AND IsDelete = 0
+        """;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, userName);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                isUnique = (count == 0);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking username uniqueness: " + e.getMessage(), e);
+        } finally {
+            DbUtils.close();
+        }
+
+        return isUnique;
+    }
 }

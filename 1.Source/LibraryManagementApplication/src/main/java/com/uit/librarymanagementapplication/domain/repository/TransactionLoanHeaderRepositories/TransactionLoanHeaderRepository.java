@@ -3,6 +3,7 @@ package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHe
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.DbUtils;
+import com.uit.librarymanagementapplication.domain.entity.TransactionLoanHeader;
 import com.uit.librarymanagementapplication.lib.Constants.TransLoanStatusConsts;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -186,6 +187,51 @@ public class TransactionLoanHeaderRepository implements ITransactionLoanHeaderRe
             throw new RuntimeException("Error updating IsDelete: " + e.getMessage(), e);
         }
 
+    }
+
+    @Override
+    public TransactionLoanHeader findTransHeaderLoan(int loanHeaderID) {
+        TransactionLoanHeader header = null;
+
+        String sql = """
+        SELECT LoanHeaderID, LoanTicketNumber, UserID_FK, 
+               TotalQty, LoanDt, LoanReturnDt, 
+               IsDelete, CreatedBy, CreatedDt, UpdateBy, UpdateDt, Status
+        FROM TransactionLoanHeaders
+        WHERE IsDelete = 0 AND LoanHeaderID = ?
+        """;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, loanHeaderID);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                header = new TransactionLoanHeader();
+                header.setLoanHeaderID(rs.getInt("LoanHeaderID"));
+                header.setLoanTicketNumber(rs.getString("LoanTicketNumber"));
+                header.setUserID(rs.getInt("UserID_FK"));
+                header.setTotalQty(rs.getInt("TotalQty"));
+                header.setLoanDt(rs.getDate("LoanDt"));
+                header.setLoanReturnDt(rs.getDate("LoanReturnDt"));
+                header.setIsDelete(rs.getInt("IsDelete"));
+                header.setCreatedBy(rs.getString("CreatedBy"));
+                header.setCreatedDt(rs.getTimestamp("CreatedDt"));
+                header.setUpdateBy(rs.getString("UpdateBy"));
+                header.setUpdateDt(rs.getTimestamp("UpdateDt"));
+                header.setStatus(rs.getInt("Status"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving transaction loan header with ID " + loanHeaderID + ": " + e.getMessage(), e);
+        } finally {
+            DbUtils.close();
+        }
+
+        return header;
     }
 
 }

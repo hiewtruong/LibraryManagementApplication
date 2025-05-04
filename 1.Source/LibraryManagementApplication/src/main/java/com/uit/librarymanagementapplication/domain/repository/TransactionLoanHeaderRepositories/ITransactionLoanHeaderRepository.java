@@ -7,6 +7,7 @@ package com.uit.librarymanagementapplication.domain.repository.TransactionLoanHe
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.entity.Author;
+import com.uit.librarymanagementapplication.domain.entity.TransactionLoanHeader;
 import java.util.List;
 
 /**
@@ -22,4 +23,6 @@ public interface ITransactionLoanHeaderRepository {
     int createTransactionLoanHeader(TransactionLoanHeaderRequestDTO requestDTO);
     
     void updateStatusRevoke(int loanHeaderID);
+    
+    TransactionLoanHeader findTransHeaderLoan(int loanHeaderID);
 }

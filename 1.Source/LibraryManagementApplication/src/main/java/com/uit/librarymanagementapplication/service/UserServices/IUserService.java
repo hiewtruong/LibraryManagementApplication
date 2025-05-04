@@ -21,5 +21,7 @@ public interface IUserService {
     void deleteUser(int userID);
     
     boolean checkDuplicateEmail(String email);
+    
+    boolean checkDuplicateUserName(String userName);
 
 }

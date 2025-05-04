@@ -30,4 +30,6 @@ public interface IUserRepository {
     boolean updateUser(User user);
     
     boolean deleteUser(int userID);
+    
+    boolean checkUsernameUniq(String userName);
 }

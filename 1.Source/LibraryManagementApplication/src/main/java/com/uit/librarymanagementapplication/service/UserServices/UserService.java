@@ -164,4 +164,9 @@ public class UserService implements IUserService {
         return userRepository.checkUniqEmail(email);
 
     }
+
+    @Override
+    public boolean checkDuplicateUserName(String userName) {
+       return userRepository.checkUsernameUniq(userName);
+    }
 }

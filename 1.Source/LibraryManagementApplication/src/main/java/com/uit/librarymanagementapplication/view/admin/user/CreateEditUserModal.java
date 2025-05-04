@@ -200,6 +200,14 @@ public class CreateEditUserModal extends JDialog {
                 CommonUI.showAlerValidate(this, ValidateMessage.PASSWORD_CAN_NOT_EMPTY);
                 return;
             }
+            if (!userService.checkDuplicateEmail(email)) {
+                CommonUI.showAlerValidate(this, ValidateMessage.EMAIL_IS_DUPLICATE);
+                return;
+            }
+            if (!userService.checkDuplicateUserName(userName)) {
+                CommonUI.showAlerValidate(this, ValidateMessage.USERNAME_IS_DUPLICATE);
+                return;
+            }
             String confirmContent = user == null ? ConfirmConsts.CONFIRM_CONTENT : ConfirmConsts.CONFIRM_UPDATE_CONTENT;
             int response = CommonUI.showConfirmDialog(this, confirmContent, Constants.ConfirmConsts.CONFIRM_TITLE);
             if (response == JOptionPane.YES_OPTION) {

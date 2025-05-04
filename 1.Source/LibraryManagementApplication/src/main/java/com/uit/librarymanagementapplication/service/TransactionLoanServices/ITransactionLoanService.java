@@ -8,6 +8,7 @@ import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.Transacti
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRequestDTO;
 import com.uit.librarymanagementapplication.domain.DTO.TransactionLoan.TransactionLoanHeaderRevokeDTO;
+import com.uit.librarymanagementapplication.domain.entity.TransactionLoanHeader;
 import java.util.List;
 
 /**
@@ -22,4 +23,5 @@ public interface ITransactionLoanService {
     void createTransactionLoan(TransactionLoanHeaderRequestDTO request);
     
     void revokeTransactionLoan(TransactionLoanHeaderRevokeDTO request);
+   
 }
