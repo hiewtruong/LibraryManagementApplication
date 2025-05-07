@@ -43,11 +43,9 @@ public class CategoryPanel extends JPanel {
         northPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         // Styled search field
-        searchField = new JTextField(20);
+        searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(200, 20));
         searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        searchField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(150, 150, 150)),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         northPanel.add(new JLabel("Search: ") {{
             setFont(new Font("Segoe UI", Font.BOLD, 14));
         }});
@@ -150,6 +148,7 @@ public class CategoryPanel extends JPanel {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setPreferredSize(new Dimension(80, 27));
         return button;
     }
 

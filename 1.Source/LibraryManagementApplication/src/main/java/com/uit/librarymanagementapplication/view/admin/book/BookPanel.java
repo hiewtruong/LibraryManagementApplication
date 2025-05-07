@@ -2,9 +2,12 @@ package com.uit.librarymanagementapplication.view.admin.book;
 
 import com.uit.librarymanagementapplication.domain.DAO.BookDAO;
 import com.uit.librarymanagementapplication.domain.DAO.GenreCategoryDAO;
+import com.uit.librarymanagementapplication.domain.DTO.Author.AuthorDTO;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.domain.entity.Book;
 import com.uit.librarymanagementapplication.domain.entity.GenreCategory;
+import com.uit.librarymanagementapplication.service.AuthorServices.AuthorService;
+import com.uit.librarymanagementapplication.service.AuthorServices.IAuthorService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +43,7 @@ public class BookPanel extends JPanel {
 
     private BookDAO bookDAO = new BookDAO();
     private GenreCategoryDAO genreCategoryDAO = new GenreCategoryDAO();
+    private IAuthorService authorService = AuthorService.getInstance();
 
     public BookPanel(UserDTO user) {
         this.allBooks = bookDAO.selectAll();
@@ -63,7 +67,7 @@ public class BookPanel extends JPanel {
         // Search field with delayed search
         searchField = new JTextField();
         searchField.setFont(FIELD_FONT);
-        searchField.setPreferredSize(new Dimension(200, 30));
+        searchField.setPreferredSize(new Dimension(200, 20));
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -239,8 +243,21 @@ public class BookPanel extends JPanel {
         // Form fields
         JTextField titleField = new JTextField(book != null ? book.getTitle() : "", 20);
         titleField.setFont(FIELD_FONT);
-        JTextField authorField = new JTextField(book != null ? book.getAuthor() : "", 20);
-        authorField.setFont(FIELD_FONT);
+        
+        // Initialize JComboBox for author selection
+        List<AuthorDTO> authors = authorService.getAuthorByName("");
+        DefaultComboBoxModel<String> authorModel = new DefaultComboBoxModel<>();
+        for (AuthorDTO author : authors) {
+            authorModel.addElement(author.getAuthorName());
+        }
+        JComboBox<String> authorComboBox = new JComboBox<>(authorModel);
+        authorComboBox.setFont(FIELD_FONT);
+        
+        // Pre-select author for existing book
+        if (book != null && book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            authorComboBox.setSelectedItem(book.getAuthor());
+        }
+        
         JButton chooseCoverButton = new JButton("Choose Cover");
         chooseCoverButton.setFont(FIELD_FONT);
         
@@ -323,7 +340,6 @@ public class BookPanel extends JPanel {
                 int result = fileChooser.showOpenDialog(editDialog);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    // coverField.setText(selectedFile.getAbsolutePath());
                     coverFieldStr = selectedFile.getAbsolutePath();
                     try {
                         Image image = new ImageIcon(selectedFile.getAbsolutePath()).getImage();
@@ -358,18 +374,7 @@ public class BookPanel extends JPanel {
         formPanel.add(authorLabel, gbc);
         gbc.gridx = 1;
         gbc.gridwidth = 2;
-        formPanel.add(authorField, gbc);
-        
-        // gbc.gridx = 0;
-        // gbc.gridy = 2;
-        // gbc.gridwidth = 1;
-        // JLabel coverLabel = new JLabel("Cover:");
-        // coverLabel.setFont(LABEL_FONT);
-        // formPanel.add(coverLabel, gbc);
-        // gbc.gridx = 1;
-        // formPanel.add(coverField, gbc);
-        // gbc.gridx = 2;
-        // formPanel.add(chooseCoverButton, gbc);
+        formPanel.add(authorComboBox, gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -469,7 +474,6 @@ public class BookPanel extends JPanel {
         deleteButton.setFont(FIELD_FONT);
         deleteButton.setPreferredSize(new Dimension(100, 30));
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.setFont(FIELD_FONT);
         cancelButton.setPreferredSize(new Dimension(100, 30));
         
         saveButton.addActionListener(e -> {
@@ -523,7 +527,9 @@ public class BookPanel extends JPanel {
                 // Create or update Book
                 Book newBook = book != null ? book : new Book();
                 newBook.setTitle(titleField.getText().trim());
-                newBook.setAuthor(authorField.getText().trim());
+                // Set author from selected item in JComboBox
+                String selectedAuthor = (String) authorComboBox.getSelectedItem();
+                newBook.setAuthor(selectedAuthor != null ? selectedAuthor : "");
                 newBook.setCover(storedCoverPath);
                 
                 // Handle multiple categories
