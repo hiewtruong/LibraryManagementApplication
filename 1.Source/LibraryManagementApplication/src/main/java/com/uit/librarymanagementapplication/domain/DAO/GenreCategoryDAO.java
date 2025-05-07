@@ -15,7 +15,7 @@ public class GenreCategoryDAO extends BaseDAO<GenreCategory, Integer> {
     private static final String UPDATE_SQL = "UPDATE GenreCategories SET nameCategory = ?, genreCategory = ?, isDelete = ?, createdDt = ?, createdBy = ?, updateDt = ?, updateBy = ? WHERE genreCategoryID = ?";
     private static final String DELETE_SQL = "DELETE FROM GenreCategories WHERE genreCategoryID = ?";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM GenreCategories WHERE genreCategoryID = ?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM GenreCategories";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM GenreCategories WHERE IsDelete = 0";
 
     @Override
     public void insert(GenreCategory entity) {
@@ -91,9 +91,9 @@ public class GenreCategoryDAO extends BaseDAO<GenreCategory, Integer> {
 
     public List<GenreCategory> getByBookCategories(String bookCategory) {
         // bookCategory type is: "Id1, Id2, Id3"
-        String sql = "SELECT * FROM GenreCategories WHERE genreCategoryID IN (" + bookCategory + ")";
+        String sql = "SELECT * FROM GenreCategories WHERE GenreCategoryID IN (" + bookCategory + ") AND IsDelete = 0";
         if (bookCategory == null || bookCategory.isEmpty()) {
-            sql = "SELECT * FROM GenreCategories";
+            sql = "SELECT * FROM GenreCategories WHERE IsDelete = 0";
         }
         List<GenreCategory> list = this.selectBySql(sql);
         return list.isEmpty() ? null : list;

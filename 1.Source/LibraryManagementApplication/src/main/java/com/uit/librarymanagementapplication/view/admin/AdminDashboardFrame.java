@@ -3,6 +3,8 @@ package com.uit.librarymanagementapplication.view.admin;
 import com.uit.librarymanagementapplication.controller.AuthorController;
 import com.uit.librarymanagementapplication.controller.TransacitonLoanController;
 import com.uit.librarymanagementapplication.controller.UserController;
+import com.uit.librarymanagementapplication.controller.admin.BookController;
+import com.uit.librarymanagementapplication.controller.admin.GenreCategoryController;
 import com.uit.librarymanagementapplication.domain.DTO.User.UserDTO;
 import com.uit.librarymanagementapplication.lib.Constants;
 import com.uit.librarymanagementapplication.view.admin.author.AuthorPanel;
@@ -22,6 +24,8 @@ public class AdminDashboardFrame extends JFrame {
     private AuthorController authorController;
     private TransacitonLoanController transacitonLoanController;
     private UserController userController;
+    private BookController bookController;
+    private GenreCategoryController genreCategoryController;
 
     public AdminDashboardFrame(UserDTO user) {
         setTitle("Admin Dashboard");
@@ -98,12 +102,18 @@ public class AdminDashboardFrame extends JFrame {
         this.authorController = new AuthorController();
         this.transacitonLoanController = new TransacitonLoanController();
         this.userController = new UserController();
+        this.bookController = new BookController();
+        this.genreCategoryController = new GenreCategoryController();
 
-        bookBtn.addActionListener(e -> setContent(new BookPanel()));
+        bookBtn.addActionListener(e -> {
+            bookController.Init(contentPanel, user, false);
+        });
         authorBtn.addActionListener(e -> {
             authorController.Init(contentPanel, false);
         });
-        genreBtn.addActionListener(e -> setContent(new CategoryPanel()));
+        genreBtn.addActionListener(e -> {
+            genreCategoryController.Init(contentPanel, user, false);
+        });
         transactionLoanBtn.addActionListener(e -> {
             transacitonLoanController.Init(contentPanel, false);
         });
