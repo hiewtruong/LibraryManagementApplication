@@ -239,6 +239,7 @@ public class BookPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH; // Align components to top
         
         // Form fields
         JTextField titleField = new JTextField(book != null ? book.getTitle() : "", 20);
@@ -359,6 +360,7 @@ public class BookPanel extends JPanel {
         // Add form components
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1;
         JLabel titleLabel = new JLabel("Title:");
         titleLabel.setFont(LABEL_FONT);
         formPanel.add(titleLabel, gbc);
@@ -377,7 +379,7 @@ public class BookPanel extends JPanel {
         formPanel.add(authorComboBox, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         JLabel hashTagJLabel = new JLabel("Hash Tag:");
         hashTagJLabel.setFont(LABEL_FONT);
@@ -387,7 +389,7 @@ public class BookPanel extends JPanel {
         formPanel.add(hashtagField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.gridwidth = 1;
         JLabel genreJLabel = new JLabel("Category:");
         genreJLabel.setFont(LABEL_FONT);
@@ -397,7 +399,7 @@ public class BookPanel extends JPanel {
         formPanel.add(genreScrollPane, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         JLabel publisherLabel = new JLabel("Publisher:");
         publisherLabel.setFont(LABEL_FONT);
@@ -407,7 +409,7 @@ public class BookPanel extends JPanel {
         formPanel.add(publisherField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         JLabel yearLabel = new JLabel("Publish Year:");
         yearLabel.setFont(LABEL_FONT);
@@ -417,7 +419,7 @@ public class BookPanel extends JPanel {
         formPanel.add(yearField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         JLabel locationLabel = new JLabel("Location:");
         locationLabel.setFont(LABEL_FONT);
@@ -427,7 +429,7 @@ public class BookPanel extends JPanel {
         formPanel.add(locationField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         JLabel displayLabel = new JLabel("Display:");
         displayLabel.setFont(LABEL_FONT);
@@ -437,7 +439,7 @@ public class BookPanel extends JPanel {
         formPanel.add(displayCheck, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 8;
         gbc.gridwidth = 1;
         JLabel qtyOHLabel = new JLabel("Quantity On Hand:");
         qtyOHLabel.setFont(LABEL_FONT);
@@ -447,7 +449,7 @@ public class BookPanel extends JPanel {
         formPanel.add(qtyOHField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 9;
         gbc.gridwidth = 1;
         JLabel qtyAllocatedLabel = new JLabel("Quantity Allocated:");
         qtyAllocatedLabel.setFont(LABEL_FONT);
@@ -457,7 +459,7 @@ public class BookPanel extends JPanel {
         formPanel.add(qtyAllocatedField, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 10;
         gbc.gridwidth = 1;
         JLabel landingPageLabel = new JLabel("Landing page:");
         landingPageLabel.setFont(LABEL_FONT);
@@ -465,6 +467,14 @@ public class BookPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridwidth = 2;
         formPanel.add(landingPageTextArea, gbc);
+        
+        // Add a dummy component to push content to top
+        gbc.gridx = 0;
+        gbc.gridy = 11;
+        gbc.gridwidth = 3;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        formPanel.add(new JPanel(), gbc);
         
         // Buttons
         JButton saveButton = new JButton("Save");
@@ -474,6 +484,7 @@ public class BookPanel extends JPanel {
         deleteButton.setFont(FIELD_FONT);
         deleteButton.setPreferredSize(new Dimension(100, 30));
         JButton cancelButton = new JButton("Cancel");
+        cancelButton.setFont(FIELD_FONT);
         cancelButton.setPreferredSize(new Dimension(100, 30));
         
         saveButton.addActionListener(e -> {
@@ -637,10 +648,10 @@ public class BookPanel extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setBackground(BG_COLOR);
         buttonPanel.add(saveButton);
-        if (book != null) {
-            buttonPanel.add(deleteButton); // Only show delete for existing books
-        }
         buttonPanel.add(cancelButton);
+        if (book != null) {
+            buttonPanel.add(deleteButton);
+        }
         
         // Assemble dialog
         mainPanel.add(previewPanel, BorderLayout.WEST);
