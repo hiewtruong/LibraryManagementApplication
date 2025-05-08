@@ -8,17 +8,14 @@ import com.uit.librarymanagementapplication.domain.entity.Book;
 import com.uit.librarymanagementapplication.domain.entity.GenreCategory;
 import com.uit.librarymanagementapplication.service.AuthorServices.AuthorService;
 import com.uit.librarymanagementapplication.service.AuthorServices.IAuthorService;
+import com.uit.librarymanagementapplication.domain.ImageUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -36,7 +33,6 @@ public class BookPanel extends JPanel {
     private JTextField searchField;
     private List<Book> allBooks;
     private Timer searchTimer;
-    private static final String COVERS_DIR = "book_covers";
     private static final Font LABEL_FONT = new Font("SansSerif", Font.BOLD, 14);
     private static final Font FIELD_FONT = new Font("SansSerif", Font.PLAIN, 14);
     private static final Color BG_COLOR = new Color(240, 240, 240);
@@ -57,25 +53,19 @@ public class BookPanel extends JPanel {
                 BorderFactory.createTitledBorder("Management of Book"),
                 BorderFactory.createEmptyBorder(5, 20, 10, 20)
         ));
-        // Initialize timer for search delay
         searchTimer = new Timer(true);
 
-        // Top panel for search and add button
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
-        // Search field with delayed search
         searchField = new JTextField();
         searchField.setFont(FIELD_FONT);
         searchField.setPreferredSize(new Dimension(200, 20));
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                // Cancel any existing timer
                 searchTimer.cancel();
                 searchTimer = new Timer(true);
-                
-                // Schedule new search after 300ms
                 searchTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -85,7 +75,6 @@ public class BookPanel extends JPanel {
             }
         });
         
-        // Add button
         JButton addButton = new JButton("Add Book");
         addButton.setFont(FIELD_FONT);
         addButton.setPreferredSize(new Dimension(120, 30));
@@ -100,7 +89,6 @@ public class BookPanel extends JPanel {
         topPanel.add(searchPanel, BorderLayout.WEST);
         topPanel.add(addButton, BorderLayout.EAST);
         
-        // Table setup
         String[] columnNames = {"ID", "Cover", "Title", "Author", "Genre", "Publisher", "Publish Year", "Location", "Display", "Qty OH", "Qty Allocated"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -115,20 +103,17 @@ public class BookPanel extends JPanel {
         };
         
         bookTable = new JTable(tableModel);
-        bookTable.setRowHeight(120); // Increased row height for images
+        bookTable.setRowHeight(120);
         bookTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         bookTable.setAutoCreateRowSorter(true);
         
-        // Custom renderer for cover image
-        bookTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer());
+        bookTable.getColumnModel().getColumn(1).setCellRenderer(ImageUtils.getImageRenderer());
         
-        // Set column widths
-        bookTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
-        bookTable.getColumnModel().getColumn(1).setPreferredWidth(120); // Cover
-        bookTable.getColumnModel().getColumn(2).setPreferredWidth(200); // Title
-        bookTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Author
+        bookTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+        bookTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+        bookTable.getColumnModel().getColumn(2).setPreferredWidth(200);
+        bookTable.getColumnModel().getColumn(3).setPreferredWidth(150);
         
-        // Double-click handler
         bookTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -157,22 +142,10 @@ public class BookPanel extends JPanel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
         
         for (Book book : books) {
-            if (book.getIsDelete() == 1) continue; // Skip deleted books
+            if (book.getIsDelete() == 1) continue;
             ImageIcon coverIcon = null;
-            try {
-                if (book.getCover() != null && !book.getCover().isEmpty()) {
-                    // Load image from resources
-                    String resourcePath = "/" + COVERS_DIR + "/" + book.getCover();
-                    java.net.URL imageURL = getClass().getResource(resourcePath);
-                    if (imageURL != null) {
-                        Image image = new ImageIcon(imageURL).getImage();
-                        Image scaledImage = image.getScaledInstance(80, 105, Image.SCALE_SMOOTH);
-                        coverIcon = new ImageIcon(scaledImage);
-                    }
-                }
-            } catch (Exception e) {
-                // If image loading fails, use null (no image)
-                System.err.println("Failed to load image for book " + book.getTitle() + ": " + e.getMessage());
+            if (book.getCover() != null && !book.getCover().isEmpty()) {
+                coverIcon = ImageUtils.loadImage("/book_covers/" + book.getCover(), 80, 105);
             }
             
             Object[] rowData = {
@@ -212,12 +185,10 @@ public class BookPanel extends JPanel {
         editDialog.setSize(850, 800);
         editDialog.getContentPane().setBackground(BG_COLOR);
         
-        // Main panel with BorderLayout
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(BG_COLOR);
         
-        // Cover preview panel
         JPanel previewPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         previewPanel.setBackground(BG_COLOR);
         JLabel previewLabel = new JLabel();
@@ -228,7 +199,6 @@ public class BookPanel extends JPanel {
         previewLabel.setText(book == null ? "Choose Cover" : null);
         previewLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Form panel
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(BG_COLOR);
         formPanel.setBorder(BorderFactory.createTitledBorder(
@@ -239,13 +209,11 @@ public class BookPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH; // Align components to top
+        gbc.anchor = GridBagConstraints.NORTH;
         
-        // Form fields
         JTextField titleField = new JTextField(book != null ? book.getTitle() : "", 20);
         titleField.setFont(FIELD_FONT);
         
-        // Initialize JComboBox for author selection
         List<AuthorDTO> authors = authorService.getAuthorByName("");
         DefaultComboBoxModel<String> authorModel = new DefaultComboBoxModel<>();
         for (AuthorDTO author : authors) {
@@ -254,15 +222,10 @@ public class BookPanel extends JPanel {
         JComboBox<String> authorComboBox = new JComboBox<>(authorModel);
         authorComboBox.setFont(FIELD_FONT);
         
-        // Pre-select author for existing book
         if (book != null && book.getAuthor() != null && !book.getAuthor().isEmpty()) {
             authorComboBox.setSelectedItem(book.getAuthor());
         }
         
-        JButton chooseCoverButton = new JButton("Choose Cover");
-        chooseCoverButton.setFont(FIELD_FONT);
-        
-        // Initialize JList for multiple category selection
         List<GenreCategory> allCategories = genreCategoryDAO.selectAll();
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (GenreCategory category : allCategories) {
@@ -273,7 +236,6 @@ public class BookPanel extends JPanel {
         genreList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         genreList.setVisibleRowCount(4);
         
-        // Pre-select categories for existing book
         if (book != null && book.getGenreCategory() != null && !book.getGenreCategory().isEmpty()) {
             String[] selectedCategories = book.getGenreCategory().split(",");
             int[] selectedIndices = new int[selectedCategories.length];
@@ -315,22 +277,11 @@ public class BookPanel extends JPanel {
         JTextField hashtagField = new JTextField(book != null ? book.getHashtag() : "", 20);
         hashtagField.setFont(FIELD_FONT);
 
-        // Load initial cover preview
         if (book != null && book.getCover() != null && !book.getCover().isEmpty()) {
-            try {
-                String resourcePath = "/" + COVERS_DIR + "/" + book.getCover();
-                java.net.URL imageURL = getClass().getResource(resourcePath);
-                if (imageURL != null) {
-                    Image image = new ImageIcon(imageURL).getImage();
-                    Image scaledImage = image.getScaledInstance(180, 240, Image.SCALE_SMOOTH);
-                    previewLabel.setIcon(new ImageIcon(scaledImage));
-                }
-            } catch (Exception e) {
-                previewLabel.setIcon(null);
-            }
+            ImageIcon coverIcon = ImageUtils.loadImage("/book_covers/" + book.getCover(), 180, 240);
+            previewLabel.setIcon(coverIcon);
         }
         
-        // File chooser for cover image
         previewLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -342,22 +293,19 @@ public class BookPanel extends JPanel {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     coverFieldStr = selectedFile.getAbsolutePath();
-                    try {
-                        Image image = new ImageIcon(selectedFile.getAbsolutePath()).getImage();
-                        Image scaledImage = image.getScaledInstance(180, 240, Image.SCALE_SMOOTH);
-                        previewLabel.setIcon(new ImageIcon(scaledImage));
+                    ImageIcon previewIcon = ImageUtils.loadImage(coverFieldStr, 180, 240);
+                    if (previewIcon != null) {
+                        previewLabel.setIcon(previewIcon);
                         previewLabel.setText(null);
-                    } catch (Exception ex) {
+                    } else {
                         previewLabel.setIcon(null);
                         JOptionPane.showMessageDialog(editDialog, 
-                            "Error loading preview: " + ex.getMessage(), 
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                            "Error loading preview", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         });
         
-        // Add form components
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
@@ -468,7 +416,6 @@ public class BookPanel extends JPanel {
         gbc.gridwidth = 2;
         formPanel.add(landingPageTextArea, gbc);
         
-        // Add a dummy component to push content to top
         gbc.gridx = 0;
         gbc.gridy = 11;
         gbc.gridwidth = 3;
@@ -476,7 +423,6 @@ public class BookPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         formPanel.add(new JPanel(), gbc);
         
-        // Buttons
         JButton saveButton = new JButton("Save");
         saveButton.setFont(FIELD_FONT);
         saveButton.setPreferredSize(new Dimension(100, 30));
@@ -488,7 +434,6 @@ public class BookPanel extends JPanel {
         cancelButton.setPreferredSize(new Dimension(100, 30));
         
         saveButton.addActionListener(e -> {
-            // Validate inputs
             if (titleField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(editDialog, 
                     "Title is required", "Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -510,40 +455,17 @@ public class BookPanel extends JPanel {
             }
             
             try {
-                // Handle cover image
                 String storedCoverPath = book != null ? book.getCover() : "";
                 if (!coverFieldStr.isEmpty()) {
-                    // Create book_covers directory in resources if it doesn't exist
-                    String resourceDir = "src/main/resources/" + COVERS_DIR;
-                    Path coversDir = Paths.get(resourceDir);
-                    if (!Files.exists(coversDir)) {
-                        Files.createDirectories(coversDir);
-                    }
-                    
-                    File sourceFile = new File(coverFieldStr);
-                    if (sourceFile.exists()) {
-                        String fileName = sourceFile.getName();
-                        Path targetPath = Paths.get(resourceDir, fileName);
-                        Files.copy(sourceFile.toPath(), targetPath.toAbsolutePath(), 
-                            java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                        storedCoverPath = fileName;
-                        
-                        // Verify the file exists
-                        if (!Files.exists(targetPath)) {
-                            throw new IOException("Failed to copy image to " + targetPath);
-                        }
-                    }
+                    storedCoverPath = ImageUtils.saveImage(new File(coverFieldStr));
                 }
                 
-                // Create or update Book
                 Book newBook = book != null ? book : new Book();
                 newBook.setTitle(titleField.getText().trim());
-                // Set author from selected item in JComboBox
                 String selectedAuthor = (String) authorComboBox.getSelectedItem();
                 newBook.setAuthor(selectedAuthor != null ? selectedAuthor : "");
                 newBook.setCover(storedCoverPath);
                 
-                // Handle multiple categories
                 String genreCategory = genreList.getSelectedValuesList().stream()
                     .map(category -> allCategories.stream()
                         .filter(c -> c.getNameCategory().equals(category))
@@ -560,11 +482,10 @@ public class BookPanel extends JPanel {
                 newBook.setIsDisplay(displayCheck.isSelected() ? 1 : 0);
                 newBook.setQtyOH(qtyOH);
                 newBook.setQtyAllocated(qtyAllocated);
-                newBook.setIsDelete(0); // Ensure not deleted
+                newBook.setIsDelete(0);
                 newBook.setLandingPage(landingPageTextArea.getText().trim());
                 newBook.setHashtag(hashtagField.getText().trim());
                 
-                // Parse publish year
                 try {
                     String yearText = yearField.getText().trim();
                     if (!yearText.isEmpty()) {
@@ -580,7 +501,6 @@ public class BookPanel extends JPanel {
                     return;
                 }
                 
-                // Set audit fields
                 if (book == null) {
                     newBook.setCreatedDt(new java.util.Date());
                     newBook.setCreatedBy(this.user.getUserName());
@@ -588,7 +508,6 @@ public class BookPanel extends JPanel {
                 newBook.setUpdateDt(new java.util.Date());
                 newBook.setUpdateBy(this.user.getUserName());
                 
-                // Save book
                 if (book == null) {
                     bookDAO.insert(newBook);
                 } else {
@@ -596,14 +515,18 @@ public class BookPanel extends JPanel {
                 }
                 
                 editDialog.dispose();
-                // Refresh table
+                // Refresh allBooks and table
+                allBooks = bookDAO.selectAll();
                 Timer refreshTimer = new Timer();
                 refreshTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        SwingUtilities.invokeLater(() -> populateTable(bookDAO.selectAll()));
+                        SwingUtilities.invokeLater(() -> {
+                            populateTable(allBooks);
+                            bookTable.repaint();
+                        });
                     }
-                }, 300);
+                }, 500); // Increased delay to ensure file system sync
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(editDialog, 
                     "Error saving cover image: " + ex.getMessage(), 
@@ -633,8 +556,8 @@ public class BookPanel extends JPanel {
                     bookDAO.update(book);
                     
                     editDialog.dispose();
-                    // Refresh table
-                    populateTable(bookDAO.selectAll());
+                    allBooks = bookDAO.selectAll();
+                    populateTable(allBooks);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(editDialog, 
                         "Error deleting book: " + ex.getMessage(), 
@@ -653,7 +576,6 @@ public class BookPanel extends JPanel {
             buttonPanel.add(deleteButton);
         }
         
-        // Assemble dialog
         mainPanel.add(previewPanel, BorderLayout.WEST);
         mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -661,33 +583,5 @@ public class BookPanel extends JPanel {
         
         editDialog.setLocationRelativeTo(null);
         editDialog.setVisible(true);
-    }
-    
-    // Custom renderer for image column
-    private class ImageRenderer extends JLabel implements TableCellRenderer {
-        public ImageRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(CENTER);
-        }
-        
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof ImageIcon) {
-                setIcon((ImageIcon) value);
-            } else {
-                setIcon(null);
-            }
-            
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
-            } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
-            }
-            
-            return this;
-        }
     }
 }
